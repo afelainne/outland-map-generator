@@ -2,14 +2,15 @@ import { Circle, Square, Triangle, Diamond, MousePointer, RefreshCw, Shuffle, Ty
 import { Button } from '@/components/ui/button';
 
 type Tool = 'select' | 'circle' | 'square' | 'triangle' | 'diamond';
+type LabelMode = 'number' | 'abbrev' | 'full';
 
 interface MapToolbarProps {
   activeTool: Tool | null;
   onToolChange: (tool: Tool) => void;
   onRegenerate: () => void;
   onRandomizeAll: () => void;
-  showNames: boolean;
-  onToggleNames: () => void;
+  labelMode: LabelMode;
+  onCycleLabelMode: () => void;
 }
 
 const tools: { id: Tool; icon: React.ReactNode; label: string }[] = [
@@ -20,7 +21,19 @@ const tools: { id: Tool; icon: React.ReactNode; label: string }[] = [
   { id: 'diamond', icon: <Diamond size={18} />, label: 'Diamond' },
 ];
 
-const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, showNames, onToggleNames }: MapToolbarProps) => {
+const labelModeLabels: Record<LabelMode, string> = {
+  number: '01',
+  abbrev: 'AB',
+  full: 'Aa',
+};
+
+const labelModeTitles: Record<LabelMode, string> = {
+  number: 'Labels: Numbers',
+  abbrev: 'Labels: Abbreviations',
+  full: 'Labels: Full Names',
+};
+
+const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, labelMode, onCycleLabelMode }: MapToolbarProps) => {
   return (
     <div className="flex flex-col gap-1 p-2 bg-card/80 backdrop-blur border border-border rounded-lg">
       {tools.map((tool) => (
@@ -37,13 +50,13 @@ const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, sh
       ))}
       <div className="h-px bg-border my-1" />
       <Button
-        variant={showNames ? 'default' : 'ghost'}
+        variant="default"
         size="icon"
-        onClick={onToggleNames}
-        title="Toggle location names"
-        className="w-9 h-9"
+        onClick={onCycleLabelMode}
+        title={labelModeTitles[labelMode]}
+        className="w-9 h-9 text-[10px] font-mono font-bold"
       >
-        <Type size={18} />
+        {labelModeLabels[labelMode]}
       </Button>
       <div className="h-px bg-border my-1" />
       <Button variant="ghost" size="icon" onClick={onRegenerate} title="Regenerate Map" className="w-9 h-9">

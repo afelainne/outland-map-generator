@@ -29,7 +29,7 @@ const Index = () => {
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
   const [contourParams, setContourParams] = useState<ContourParams>(DEFAULT_CONTOUR_PARAMS);
-  const [showNames, setShowNames] = useState(false);
+  const [labelMode, setLabelMode] = useState<'number' | 'abbrev' | 'full'>('number');
   const svgRef = useRef<SVGSVGElement>(null);
 
   const theme = MAP_THEMES.find((t) => t.id === themeId) || MAP_THEMES[0];
@@ -156,8 +156,8 @@ const Index = () => {
             onToolChange={setActiveTool}
             onRegenerate={handleRegenerate}
             onRandomizeAll={handleRandomizeAll}
-            showNames={showNames}
-            onToggleNames={() => setShowNames((v) => !v)}
+            labelMode={labelMode}
+            onCycleLabelMode={() => setLabelMode((v) => v === 'number' ? 'abbrev' : v === 'abbrev' ? 'full' : 'number')}
           />
         </div>
 
@@ -178,7 +178,7 @@ const Index = () => {
             svgRef={svgRef}
             seed={seed}
             lineWidth={contourParams.lineWidth}
-            showNames={showNames}
+            labelMode={labelMode}
           />
         </div>
 
