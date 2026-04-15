@@ -161,6 +161,8 @@ const Index = () => {
             onRandomizeAll={handleRandomizeAll}
             labelMode={labelMode}
             onCycleLabelMode={() => setLabelMode((v) => v === 'number' ? 'abbrev' : v === 'abbrev' ? 'full' : 'number')}
+            markerType={labelStyle.markerType}
+            onMarkerTypeChange={(type) => setLabelStyle((prev) => ({ ...prev, markerType: type }))}
           />
           <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4 max-h-[80vh] overflow-y-auto">
             <ContourControls params={contourParams} onChange={setContourParams} />

@@ -143,7 +143,7 @@ export const DEFAULT_CONTOUR_PARAMS: ContourParams = {
   levels: 20,
   smoothing: 0.8,
   detail: 2,
-  lineWidth: 1,
+  lineWidth: 0.3,
 };
 
 /* ── Contour generation ── */
