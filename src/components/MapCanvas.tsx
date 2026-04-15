@@ -304,9 +304,10 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
           const logoScale = (dotR * 2) / 110;
 
           const renderDotMarker = () => {
+            const iconOp = labelStyle.nameIconOpacity ?? 0.9;
             if (mType === 'logo') {
               return (
-                <g transform={`translate(${dot.x - dotR}, ${dot.y - dotR}) scale(${logoScale})`} opacity="0.9">
+                <g transform={`translate(${dot.x - dotR}, ${dot.y - dotR}) scale(${logoScale})`} opacity={iconOp}>
                   <path d="M13.4186 62.3094H6.49537V55.3861H13.4186V62.3094Z" fill={theme.dot} />
                   <path d="M27.2652 62.3094H20.3419V55.3861H27.2652V62.3094Z" fill={theme.dot} />
                   <path d="M41.1117 62.3094H34.1884V55.3861H41.1117V62.3094Z" fill={theme.dot} />
@@ -322,17 +323,17 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
               const sw = 1.2;
               switch (shapeType) {
                 case 'circle':
-                  return <circle cx={dot.x} cy={dot.y} r={shapeSize} fill="none" stroke={theme.dot} strokeWidth={sw} />;
+                  return <circle cx={dot.x} cy={dot.y} r={shapeSize} fill="none" stroke={theme.dot} strokeWidth={sw} opacity={iconOp} />;
                 case 'square':
-                  return <rect x={dot.x - shapeSize} y={dot.y - shapeSize} width={shapeSize * 2} height={shapeSize * 2} fill="none" stroke={theme.dot} strokeWidth={sw} />;
+                  return <rect x={dot.x - shapeSize} y={dot.y - shapeSize} width={shapeSize * 2} height={shapeSize * 2} fill="none" stroke={theme.dot} strokeWidth={sw} opacity={iconOp} />;
                 case 'triangle':
-                  return <polygon points={`${dot.x},${dot.y - shapeSize} ${dot.x - shapeSize},${dot.y + shapeSize} ${dot.x + shapeSize},${dot.y + shapeSize}`} fill="none" stroke={theme.dot} strokeWidth={sw} />;
+                  return <polygon points={`${dot.x},${dot.y - shapeSize} ${dot.x - shapeSize},${dot.y + shapeSize} ${dot.x + shapeSize},${dot.y + shapeSize}`} fill="none" stroke={theme.dot} strokeWidth={sw} opacity={iconOp} />;
                 case 'diamond':
-                  return <polygon points={`${dot.x},${dot.y - shapeSize} ${dot.x + shapeSize},${dot.y} ${dot.x},${dot.y + shapeSize} ${dot.x - shapeSize},${dot.y}`} fill="none" stroke={theme.dot} strokeWidth={sw} />;
+                  return <polygon points={`${dot.x},${dot.y - shapeSize} ${dot.x + shapeSize},${dot.y} ${dot.x},${dot.y + shapeSize} ${dot.x - shapeSize},${dot.y}`} fill="none" stroke={theme.dot} strokeWidth={sw} opacity={iconOp} />;
               }
             }
             // default: filled dot
-            return <circle cx={dot.x} cy={dot.y} r={dotR} fill={theme.dot} opacity="0.9" />;
+            return <circle cx={dot.x} cy={dot.y} r={dotR} fill={theme.dot} opacity={iconOp} />;
           };
 
           return (
