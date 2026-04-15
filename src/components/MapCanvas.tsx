@@ -156,8 +156,11 @@ const MapCanvas = ({
           const textW = labelText.length * charWidth + 12;
           const textH = 14;
           const radius = labelStyle.rounded ? 3 : 0;
+          const bgFill = labelStyle.bgColor || theme.dot;
+          const strokeColor = labelStyle.outlineColor || theme.dot;
+          const isFullOpacity = labelStyle.opacity >= 1;
           return (
-            <g key={`dot-${i}`} opacity="0.85">
+            <g key={`dot-${i}`}>
               <circle cx={dot.x} cy={dot.y} r={dot.r} fill={theme.dot} opacity="0.9" />
               <rect
                 x={dot.x + dot.r + 4}
@@ -166,18 +169,18 @@ const MapCanvas = ({
                 height={textH}
                 rx={radius}
                 ry={radius}
-                fill={theme.dot}
-                opacity={labelStyle.opacity}
-                stroke={labelStyle.outline ? theme.dot : 'none'}
+                fill={bgFill}
+                opacity={isFullOpacity ? 1 : labelStyle.opacity}
+                stroke={labelStyle.outline ? strokeColor : 'none'}
                 strokeWidth={labelStyle.outline ? 0.7 : 0}
-                strokeOpacity="0.6"
+                strokeOpacity={isFullOpacity ? 1 : 0.6}
               />
               <text
                 x={dot.x + dot.r + 10}
                 y={dot.y + 3.5}
                 fill={theme.text}
                 fontSize="7"
-                opacity="0.75"
+                opacity="0.9"
                 style={{ fontFamily: "'Space Mono', monospace" }}
               >
                 {labelText}

@@ -6,6 +6,8 @@ export interface LabelStyleParams {
   opacity: number;
   outline: boolean;
   rounded: boolean;
+  bgColor: string;
+  outlineColor: string;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -13,12 +15,44 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   opacity: 0.15,
   outline: true,
   rounded: true,
+  bgColor: '',
+  outlineColor: '',
 };
 
 interface LabelControlsProps {
   params: LabelStyleParams;
   onChange: (params: LabelStyleParams) => void;
 }
+
+const COLOR_PRESETS = [
+  { label: 'Theme', value: '' },
+  { label: 'White', value: '#ffffff' },
+  { label: 'Black', value: '#000000' },
+  { label: 'Green', value: '#22c55e' },
+  { label: 'Blue', value: '#3b82f6' },
+  { label: 'Red', value: '#ef4444' },
+  { label: 'Yellow', value: '#eab308' },
+  { label: 'Orange', value: '#f97316' },
+];
+
+const ColorPicker = ({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) => (
+  <div className="space-y-1">
+    <span className="text-[10px] font-mono text-foreground/70">{label}</span>
+    <div className="flex gap-1 flex-wrap">
+      {COLOR_PRESETS.map((c) => (
+        <button
+          key={c.value}
+          onClick={() => onChange(c.value)}
+          className={`w-4 h-4 rounded-sm border transition-all ${value === c.value ? 'border-foreground scale-110' : 'border-border/50'}`}
+          style={{ backgroundColor: c.value || 'transparent' }}
+          title={c.label}
+        >
+          {c.value === '' && <span className="text-[6px] text-muted-foreground leading-none block text-center">T</span>}
+        </button>
+      ))}
+    </div>
+  </div>
+);
 
 const LabelControls = ({ params, onChange }: LabelControlsProps) => {
   const update = <K extends keyof LabelStyleParams>(key: K, value: LabelStyleParams[K]) => {
@@ -58,6 +92,12 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
           className="w-full"
         />
       </div>
+
+      <ColorPicker label="BG Color" value={params.bgColor} onChange={(v) => update('bgColor', v)} />
+
+      {params.outline && (
+        <ColorPicker label="Outline Color" value={params.outlineColor} onChange={(v) => update('outlineColor', v)} />
+      )}
     </div>
   );
 };
