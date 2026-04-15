@@ -1,5 +1,6 @@
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
 
 export interface LabelStyleParams {
   uppercase: boolean;
@@ -25,7 +26,7 @@ interface LabelControlsProps {
 }
 
 const COLOR_PRESETS = [
-  { label: 'Theme', value: '' },
+  { label: 'Theme BG', value: '' },
   { label: 'White', value: '#ffffff' },
   { label: 'Black', value: '#000000' },
   { label: 'Green', value: '#22c55e' },
@@ -36,7 +37,7 @@ const COLOR_PRESETS = [
 ];
 
 const ColorPicker = ({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) => (
-  <div className="space-y-1">
+  <div className="space-y-1.5">
     <span className="text-[10px] font-mono text-foreground/70">{label}</span>
     <div className="flex gap-1 flex-wrap">
       {COLOR_PRESETS.map((c) => (
@@ -50,6 +51,20 @@ const ColorPicker = ({ value, onChange, label }: { value: string; onChange: (v: 
           {c.value === '' && <span className="text-[6px] text-muted-foreground leading-none block text-center">T</span>}
         </button>
       ))}
+    </div>
+    <div className="flex items-center gap-1.5">
+      <input
+        type="color"
+        value={value || '#000000'}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-5 h-5 rounded-sm border border-border cursor-pointer p-0 bg-transparent"
+      />
+      <Input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Theme BG"
+        className="h-5 text-[9px] font-mono px-1.5 flex-1"
+      />
     </div>
   </div>
 );
