@@ -18,6 +18,8 @@ export interface LabelStyleParams {
   legendScale: number;
   showShapes: boolean;
   showArrows: boolean;
+  arrowSpacing: number;
+  arrowSize: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -34,6 +36,8 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   legendScale: 0.7,
   showShapes: true,
   showArrows: false,
+  arrowSpacing: 80,
+  arrowSize: 1,
 };
 
 interface LabelControlsProps {
@@ -106,6 +110,39 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
         <span className="text-[10px] font-mono text-foreground/70">Contour Arrows</span>
         <Switch checked={params.showArrows} onCheckedChange={(v) => update('showArrows', v)} className="scale-75" />
       </div>
+
+      {params.showArrows && (
+        <>
+          <div className="space-y-1">
+            <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+              <span>Arrow Spacing</span>
+              <span>{params.arrowSpacing}px</span>
+            </div>
+            <Slider
+              min={20}
+              max={200}
+              step={10}
+              value={[params.arrowSpacing]}
+              onValueChange={([v]) => update('arrowSpacing', v)}
+              className="w-full"
+            />
+          </div>
+          <div className="space-y-1">
+            <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+              <span>Arrow Size</span>
+              <span>{Math.round(params.arrowSize * 100)}%</span>
+            </div>
+            <Slider
+              min={30}
+              max={300}
+              step={10}
+              value={[Math.round(params.arrowSize * 100)]}
+              onValueChange={([v]) => update('arrowSize', v / 100)}
+              className="w-full"
+            />
+          </div>
+        </>
+      )}
 
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-foreground/70">Uppercase</span>

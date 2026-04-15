@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false },
+  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1 },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -173,8 +173,8 @@ const MapCanvas = ({
             }
           }
           if (points.length < 3) return null;
-          // Place arrows every ~80px along the path
-          const arrowSpacing = 80;
+          const arrowSpacing = labelStyle.arrowSpacing;
+          const as = labelStyle.arrowSize;
           const arrows: JSX.Element[] = [];
           let dist = 0;
           let nextArrowAt = arrowSpacing * 0.5;
@@ -188,7 +188,7 @@ const MapCanvas = ({
               const mx = (points[j].x + points[j - 1].x) / 2;
               const my = (points[j].y + points[j - 1].y) / 2;
               arrows.push(
-                <g key={`${i}-${j}`} transform={`translate(${mx}, ${my}) rotate(${angle})`}>
+                <g key={`${i}-${j}`} transform={`translate(${mx}, ${my}) rotate(${angle}) scale(${as})`}>
                   <path d="M-3,-2.5 L1,0 L-3,2.5" fill="none" stroke={theme.line} strokeWidth="0.8" opacity="0.6" />
                 </g>
               );
