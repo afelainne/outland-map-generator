@@ -201,7 +201,7 @@ const MapCanvas = ({
           {String(mapNumber).padStart(2, '0')}
         </text>
 
-        {/* Markers */}
+        {/* Markers (shapes only, no labels) */}
         {markers.map((m) => (
           <g
             key={m.id}
@@ -212,16 +212,6 @@ const MapCanvas = ({
             style={{ cursor: 'pointer' }}
           >
             {renderMarkerShape(m)}
-            <text
-              x={m.x + 10}
-              y={m.y - 2}
-              fill={theme.text}
-              fontSize={labelMode === 'full' ? "5" : labelMode === 'abbrev' ? "6" : "7"}
-              opacity="0.9"
-              style={{ fontFamily: "'Space Mono', monospace" }}
-            >
-              {labelMode === 'full' ? m.name : labelMode === 'abbrev' ? abbreviate(m.name) : m.number}
-            </text>
           </g>
         ))}
 
