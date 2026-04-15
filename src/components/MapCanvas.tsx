@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1 },
+  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7 },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -285,16 +285,17 @@ const MapCanvas = ({
 
         {/* Legend inside SVG */}
         {(() => {
-          const legendItemH = 12;
-          const legendPadding = 6;
-          const headerH = 10;
+          const ls = labelStyle.legendScale;
+          const legendItemH = 10 * ls;
+          const legendPadding = 5 * ls;
+          const headerH = 9 * ls;
           const totalH = headerH + dots.length * legendItemH + legendPadding * 2;
-          const legendW = 110;
-          const legendX = width - 14;
-          const legendY = height - totalH - 14;
+          const legendW = 90 * ls;
+          const legendX = width - 12;
+          const legendY = height - totalH - 12;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
           const mType = labelStyle.markerType;
-          const radius = labelStyle.rounded ? 4 : 0;
+          const radius = labelStyle.rounded ? 3 * ls : 0;
 
           return (
             <g>
@@ -312,10 +313,10 @@ const MapCanvas = ({
               />
               <text
                 x={legendX - legendW + legendPadding}
-                y={legendY + legendPadding + 6}
+                y={legendY + legendPadding + 4 * ls}
                 fill={theme.text}
-                fontSize="5"
-                letterSpacing="2"
+                fontSize={4 * ls}
+                letterSpacing={1.5 * ls}
                 opacity="0.5"
                 style={{ fontFamily: "'Space Mono', monospace" }}
               >
@@ -323,18 +324,18 @@ const MapCanvas = ({
               </text>
               {dots.map((dot, i) => {
                 const itemY = legendY + legendPadding + headerH + i * legendItemH + legendItemH / 2;
-                const iconX = legendX - legendW + legendPadding + 4;
-                const textX = iconX + 10;
+                const iconX = legendX - legendW + legendPadding + 3 * ls;
+                const textX = iconX + 8 * ls;
                 const displayName = labelStyle.uppercase ? (dot.name || '').toUpperCase() : dot.name || '';
                 const shapeType = shapes[i % shapes.length];
-                const sz = 3;
+                const sz = 2.5 * ls;
                 const c = theme.dot;
 
                 const renderIcon = () => {
                   if (mType === 'logo') {
-                    const ls = 7 / 110;
+                    const logoS = (5 * ls) / 110;
                     return (
-                      <g transform={`translate(${iconX - 3.5}, ${itemY - 3.5}) scale(${ls})`} fill={c}>
+                      <g transform={`translate(${iconX - 2.5 * ls}, ${itemY - 2.5 * ls}) scale(${logoS})`} fill={c}>
                         <path d="M13.4186 62.3094H6.49537V55.3861H13.4186V62.3094Z" />
                         <path d="M27.2652 62.3094H20.3419V55.3861H27.2652V62.3094Z" />
                         <path d="M41.1117 62.3094H34.1884V55.3861H41.1117V62.3094Z" />
@@ -349,16 +350,16 @@ const MapCanvas = ({
                   if (mType === 'shapes') {
                     switch (shapeType) {
                       case 'circle':
-                        return <circle cx={iconX} cy={itemY} r={sz} fill="none" stroke={c} strokeWidth="0.8" />;
+                        return <circle cx={iconX} cy={itemY} r={sz} fill="none" stroke={c} strokeWidth={0.6 * ls} />;
                       case 'square':
-                        return <rect x={iconX - sz} y={itemY - sz} width={sz * 2} height={sz * 2} fill="none" stroke={c} strokeWidth="0.8" />;
+                        return <rect x={iconX - sz} y={itemY - sz} width={sz * 2} height={sz * 2} fill="none" stroke={c} strokeWidth={0.6 * ls} />;
                       case 'triangle':
-                        return <polygon points={`${iconX},${itemY - sz} ${iconX - sz},${itemY + sz} ${iconX + sz},${itemY + sz}`} fill="none" stroke={c} strokeWidth="0.8" />;
+                        return <polygon points={`${iconX},${itemY - sz} ${iconX - sz},${itemY + sz} ${iconX + sz},${itemY + sz}`} fill="none" stroke={c} strokeWidth={0.6 * ls} />;
                       case 'diamond':
-                        return <polygon points={`${iconX},${itemY - sz} ${iconX + sz},${itemY} ${iconX},${itemY + sz} ${iconX - sz},${itemY}`} fill="none" stroke={c} strokeWidth="0.8" />;
+                        return <polygon points={`${iconX},${itemY - sz} ${iconX + sz},${itemY} ${iconX},${itemY + sz} ${iconX - sz},${itemY}`} fill="none" stroke={c} strokeWidth={0.6 * ls} />;
                     }
                   }
-                  return <circle cx={iconX} cy={itemY} r="2" fill={c} opacity="0.9" />;
+                  return <circle cx={iconX} cy={itemY} r={1.5 * ls} fill={c} opacity="0.9" />;
                 };
 
                 return (
@@ -366,9 +367,9 @@ const MapCanvas = ({
                     {renderIcon()}
                     <text
                       x={textX}
-                      y={itemY + 2.5}
+                      y={itemY + 2 * ls}
                       fill={theme.text}
-                      fontSize="6"
+                      fontSize={4.5 * ls}
                       style={{ fontFamily: "'Space Mono', monospace" }}
                     >
                       {displayName}

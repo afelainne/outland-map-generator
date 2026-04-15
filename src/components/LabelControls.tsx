@@ -15,6 +15,7 @@ export interface LabelStyleParams {
   markerType: MarkerType;
   markerSize: number;
   shapeScale: number;
+  legendScale: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -28,6 +29,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   markerType: 'dot',
   markerSize: 1,
   shapeScale: 1,
+  legendScale: 0.7,
 };
 
 interface LabelControlsProps {
@@ -168,6 +170,21 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
           step={10}
           value={[Math.round(params.shapeScale * 100)]}
           onValueChange={([v]) => update('shapeScale', v / 100)}
+          className="w-full"
+        />
+      </div>
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Legend Size</span>
+          <span>{Math.round(params.legendScale * 100)}%</span>
+        </div>
+        <Slider
+          min={30}
+          max={150}
+          step={5}
+          value={[Math.round(params.legendScale * 100)]}
+          onValueChange={([v]) => update('legendScale', v / 100)}
           className="w-full"
         />
       </div>
