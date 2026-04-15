@@ -299,7 +299,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
           const dotR = dot.r * s * labelStyle.markerSize;
           const mType = labelStyle.markerType;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
-          const shapeType = shapes[i % shapes.length];
+          const shapeType = labelStyle.nameIconShape || shapes[i % shapes.length];
           const shapeSize = dotR * 1.2;
           const logoScale = (dotR * 2) / 110;
 
