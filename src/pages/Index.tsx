@@ -24,7 +24,9 @@ const Index = () => {
   const [themeId, setThemeId] = useState('monorail');
   const [terrainId, setTerrainId] = useState('mountain');
   const [activeTool, setActiveTool] = useState<'select' | 'circle' | 'square' | 'triangle' | 'diamond'>('select');
+  const [globalShape, setGlobalShape] = useState<'circle' | 'square' | 'triangle' | 'diamond'>('circle');
   const [customMarkers, setCustomMarkers] = useState<MapMarker[]>([]);
+  const [renamedMarkers, setRenamedMarkers] = useState<Record<string, string>>({});
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
   const [canvasPresetId, setCanvasPresetId] = useState('square');
@@ -44,8 +46,15 @@ const Index = () => {
   const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain, contourParams), [seed, terrain, contourParams]);
   const dots = useMemo(() => generateScatterDots(MAP_W, MAP_H, seed, 50), [seed]);
   const generatedMarkers = useMemo(() => generateMarkers(MAP_W, MAP_H, seed, 15), [seed]);
-
-  const allMarkers = useMemo(() => [...generatedMarkers, ...customMarkers], [generatedMarkers, customMarkers]);
+  // Apply global shape override to all markers
+  const allMarkers = useMemo(() => {
+    const combined = [...generatedMarkers, ...customMarkers];
+    return combined.map(m => ({
+      ...m,
+      shape: globalShape,
+      name: renamedMarkers[m.id] ?? m.name,
+    }));
+  }, [generatedMarkers, customMarkers, globalShape, renamedMarkers]);
 
   const { exportSVG, exportRaster } = useMapExport(svgRef);
 
@@ -90,6 +99,7 @@ const Index = () => {
   }, []);
 
   const handleRenameMarker = useCallback((id: string, name: string) => {
+    setRenamedMarkers(prev => ({ ...prev, [id]: name }));
     setCustomMarkers((prev) => prev.map((m) => (m.id === id ? { ...m, name } : m)));
   }, []);
 
@@ -158,7 +168,12 @@ const Index = () => {
         <div className="absolute top-4 left-4 z-10 flex gap-3">
           <MapToolbar
             activeTool={activeTool}
-            onToolChange={setActiveTool}
+            onToolChange={(tool) => {
+              setActiveTool(tool);
+              if (tool !== 'select') {
+                setGlobalShape(tool as 'circle' | 'square' | 'triangle' | 'diamond');
+              }
+            }}
             onRegenerate={handleRegenerate}
             onRandomizeAll={handleRandomizeAll}
             labelMode={labelMode}
