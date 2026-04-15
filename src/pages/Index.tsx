@@ -45,8 +45,11 @@ const Index = () => {
   const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain, contourParams), [seed, terrain, contourParams]);
   const dots = useMemo(() => generateScatterDots(MAP_W, MAP_H, seed, 50), [seed]);
   const generatedMarkers = useMemo(() => generateMarkers(MAP_W, MAP_H, seed, 15), [seed]);
-
-  const allMarkers = useMemo(() => [...generatedMarkers, ...customMarkers], [generatedMarkers, customMarkers]);
+  // Apply global shape override to all markers
+  const allMarkers = useMemo(() => {
+    const combined = [...generatedMarkers, ...customMarkers];
+    return combined.map(m => ({ ...m, shape: globalShape }));
+  }, [generatedMarkers, customMarkers, globalShape]);
 
   const { exportSVG, exportRaster } = useMapExport(svgRef);
 
