@@ -80,6 +80,21 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
         <Switch checked={params.showBranding} onCheckedChange={(v) => update('showBranding', v)} className="scale-75" />
       </div>
 
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Grid Opacity</span>
+          <span>{Math.round(params.gridOpacity * 100)}%</span>
+        </div>
+        <Slider
+          min={0}
+          max={100}
+          step={5}
+          value={[Math.round(params.gridOpacity * 100)]}
+          onValueChange={([v]) => update('gridOpacity', v / 100)}
+          className="w-full"
+        />
+      </div>
+
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-foreground/70">Show Shapes</span>
         <Switch checked={params.showShapes} onCheckedChange={(v) => update('showShapes', v)} className="scale-75" />
