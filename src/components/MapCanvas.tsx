@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5 },
+  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1 },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -69,19 +69,20 @@ const MapCanvas = ({
   const gridLines = useMemo(() => {
     const lines: JSX.Element[] = [];
     const spacing = 50;
-    const go = labelStyle.gridOpacity;
+    const gridVisibility = Math.max(0, Math.min(1, labelStyle.gridOpacity));
+    const gridStrokeWidth = Math.max(0.5, labelStyle.gridLineWidth);
     for (let x = spacing; x < width; x += spacing) {
       lines.push(
-        <line key={`v-${x}`} x1={x} y1={0} x2={x} y2={height} stroke={theme.grid} strokeWidth="1" opacity={go} />
+        <line key={`v-${x}`} x1={x} y1={0} x2={x} y2={height} stroke={theme.line} strokeWidth={gridStrokeWidth} strokeOpacity={gridVisibility} />
       );
     }
     for (let y = spacing; y < height; y += spacing) {
       lines.push(
-        <line key={`h-${y}`} x1={0} y1={y} x2={width} y2={y} stroke={theme.grid} strokeWidth="1" opacity={go} />
+        <line key={`h-${y}`} x1={0} y1={y} x2={width} y2={y} stroke={theme.line} strokeWidth={gridStrokeWidth} strokeOpacity={gridVisibility} />
       );
     }
     return lines;
-  }, [width, height, theme.grid, labelStyle.gridOpacity]);
+  }, [width, height, theme.line, labelStyle.gridOpacity, labelStyle.gridLineWidth]);
 
   // Generate paper texture noise pattern
   const textureId = `texture-${seed}`;

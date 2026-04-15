@@ -22,6 +22,7 @@ export interface LabelStyleParams {
   showLegend: boolean;
   showBranding: boolean;
   gridOpacity: number;
+  gridLineWidth: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -42,6 +43,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   showLegend: true,
   showBranding: true,
   gridOpacity: 0.5,
+  gridLineWidth: 1,
 };
 
 interface LabelControlsProps {
@@ -91,6 +93,21 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
           step={1}
           value={[Math.round(params.gridOpacity * 100)]}
           onValueChange={([v]) => update('gridOpacity', v / 100)}
+          className="w-full"
+        />
+      </div>
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Grid Line Width</span>
+          <span>{Math.round(params.gridLineWidth * 100) / 100}px</span>
+        </div>
+        <Slider
+          min={0.5}
+          max={4}
+          step={0.25}
+          value={[params.gridLineWidth]}
+          onValueChange={([v]) => update('gridLineWidth', v)}
           className="w-full"
         />
       </div>
