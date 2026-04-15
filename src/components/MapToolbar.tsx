@@ -43,9 +43,23 @@ const markerTypeIcons: { id: MarkerType; icon: string; label: string }[] = [
 ];
 
 const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, labelMode, onCycleLabelMode, markerType, onMarkerTypeChange }: MapToolbarProps) => {
+  const shapesActive = activeTool !== 'select';
+
   return (
     <div className="flex flex-col gap-1 p-2 bg-card/80 backdrop-blur border border-border rounded-lg">
-      {tools.map((tool) => (
+      {/* Select tool - always available */}
+      <Button
+        variant={activeTool === 'select' ? 'default' : 'ghost'}
+        size="icon"
+        onClick={() => onToolChange('select')}
+        title="Select"
+        className="w-9 h-9"
+      >
+        <MousePointer size={18} />
+      </Button>
+      <div className="h-px bg-border my-1" />
+      {/* Shape tools for placing markers */}
+      {tools.filter(t => t.id !== 'select').map((tool) => (
         <Button
           key={tool.id}
           variant={activeTool === tool.id ? 'default' : 'ghost'}
@@ -58,6 +72,7 @@ const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, la
         </Button>
       ))}
       <div className="h-px bg-border my-1" />
+      {/* Marker type icons - for changing how name dots look */}
       {markerTypeIcons.map((mt) => (
         <Button
           key={mt.id}
