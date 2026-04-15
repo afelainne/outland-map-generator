@@ -17,7 +17,7 @@ interface MapCanvasProps {
   svgRef: React.RefObject<SVGSVGElement | null>;
   seed: number;
   lineWidth?: number;
-  showNames?: boolean;
+  labelMode?: 'number' | 'abbrev' | 'full';
 }
 
 const MapCanvas = ({
@@ -35,7 +35,7 @@ const MapCanvas = ({
   svgRef,
   seed,
   lineWidth = 1,
-  showNames = false,
+  labelMode = 'number',
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -173,11 +173,11 @@ const MapCanvas = ({
               x={m.x + 10}
               y={m.y - 2}
               fill={theme.text}
-              fontSize={showNames ? "5.5" : "7"}
+              fontSize={labelMode === 'full' ? "5" : labelMode === 'abbrev' ? "6" : "7"}
               opacity="0.9"
               style={{ fontFamily: "'Space Mono', monospace" }}
             >
-              {showNames ? m.name : m.number}
+              {labelMode === 'full' ? m.name : labelMode === 'abbrev' ? abbreviate(m.name) : m.number}
             </text>
           </g>
         ))}
