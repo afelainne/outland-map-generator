@@ -17,6 +17,7 @@ export interface LabelStyleParams {
   shapeScale: number;
   legendScale: number;
   showShapes: boolean;
+  showArrows: boolean;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -32,6 +33,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   shapeScale: 1,
   legendScale: 0.7,
   showShapes: true,
+  showArrows: false,
 };
 
 interface LabelControlsProps {
