@@ -1,6 +1,7 @@
 import { useRef, useCallback, useMemo } from 'react';
 import type { MapTheme } from '@/lib/themes';
 import type { MapMarker, ScatterDot } from '@/lib/noise';
+import type { LabelStyleParams } from '@/components/LabelControls';
 
 /** Create abbreviation from name: "Department of Imagination" → "D.O.I." */
 function abbreviate(name: string): string {
@@ -27,6 +28,7 @@ interface MapCanvasProps {
   seed: number;
   lineWidth?: number;
   labelMode?: 'number' | 'abbrev' | 'full';
+  labelStyle?: LabelStyleParams;
 }
 
 const MapCanvas = ({
@@ -45,6 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
+  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -147,29 +150,28 @@ const MapCanvas = ({
 
         {/* Location name labels with dot containers */}
         {dots.map((dot, i) => {
-          const labelText = dot.name || '';
-          const charWidth = 3.8;
+          const rawText = dot.name || '';
+          const labelText = labelStyle.uppercase ? rawText.toUpperCase() : rawText;
+          const charWidth = labelStyle.uppercase ? 4.2 : 3.8;
           const textW = labelText.length * charWidth + 12;
           const textH = 14;
+          const radius = labelStyle.rounded ? 3 : 0;
           return (
             <g key={`dot-${i}`} opacity="0.85">
-              {/* Dot marker */}
               <circle cx={dot.x} cy={dot.y} r={dot.r} fill={theme.dot} opacity="0.9" />
-              {/* Label container */}
               <rect
                 x={dot.x + dot.r + 4}
                 y={dot.y - textH / 2}
                 width={textW}
                 height={textH}
-                rx={3}
-                ry={3}
+                rx={radius}
+                ry={radius}
                 fill={theme.dot}
-                opacity="0.15"
-                stroke={theme.dot}
-                strokeWidth="0.5"
-                strokeOpacity="0.4"
+                opacity={labelStyle.opacity}
+                stroke={labelStyle.outline ? theme.dot : 'none'}
+                strokeWidth={labelStyle.outline ? 0.7 : 0}
+                strokeOpacity="0.6"
               />
-              {/* Label text */}
               <text
                 x={dot.x + dot.r + 10}
                 y={dot.y + 3.5}

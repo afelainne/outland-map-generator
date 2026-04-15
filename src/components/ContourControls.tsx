@@ -12,7 +12,7 @@ const ContourControls = ({ params, onChange }: ContourControlsProps) => {
   };
 
   return (
-    <div className="absolute bottom-4 left-4 z-10 bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-3">
+    <div className="space-y-3">
       <div className="text-[10px] text-muted-foreground tracking-widest uppercase mb-2">Contour Controls</div>
 
       <div className="space-y-1">

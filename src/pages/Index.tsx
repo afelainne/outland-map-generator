@@ -8,6 +8,8 @@ import MarkerPanel from '@/components/MarkerPanel';
 import ExportBar from '@/components/ExportBar';
 import OutlandLogo from '@/components/OutlandLogo';
 import ContourControls from '@/components/ContourControls';
+import LabelControls, { DEFAULT_LABEL_STYLE } from '@/components/LabelControls';
+import type { LabelStyleParams } from '@/components/LabelControls';
 import { useMapExport } from '@/hooks/useMapExport';
 import {
   Select,
@@ -30,6 +32,7 @@ const Index = () => {
   const [resolution, setResolution] = useState('2x');
   const [contourParams, setContourParams] = useState<ContourParams>(DEFAULT_CONTOUR_PARAMS);
   const [labelMode, setLabelMode] = useState<'number' | 'abbrev' | 'full'>('number');
+  const [labelStyle, setLabelStyle] = useState<LabelStyleParams>(DEFAULT_LABEL_STYLE);
   const svgRef = useRef<SVGSVGElement>(null);
 
   const theme = MAP_THEMES.find((t) => t.id === themeId) || MAP_THEMES[0];
@@ -179,11 +182,17 @@ const Index = () => {
             seed={seed}
             lineWidth={contourParams.lineWidth}
             labelMode={labelMode}
+            labelStyle={labelStyle}
           />
         </div>
 
-        {/* Contour controls */}
-        <ContourControls params={contourParams} onChange={setContourParams} />
+        {/* Controls panel */}
+        <div className="absolute bottom-4 left-4 z-10 bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4">
+          <ContourControls params={contourParams} onChange={setContourParams} />
+          <div className="border-t border-border pt-3">
+            <LabelControls params={labelStyle} onChange={setLabelStyle} />
+          </div>
+        </div>
 
         {/* Marker panel */}
         <MarkerPanel
