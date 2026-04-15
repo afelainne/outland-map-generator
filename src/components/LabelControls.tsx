@@ -2,6 +2,8 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 
+export type MarkerType = 'dot' | 'shapes' | 'logo';
+
 export interface LabelStyleParams {
   uppercase: boolean;
   opacity: number;
@@ -10,6 +12,7 @@ export interface LabelStyleParams {
   bgColor: string;
   outlineColor: string;
   scale: number;
+  markerType: MarkerType;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -20,6 +23,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   bgColor: '',
   outlineColor: '',
   scale: 1,
+  markerType: 'dot',
 };
 
 interface LabelControlsProps {
@@ -79,6 +83,21 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
   return (
     <div className="space-y-3">
       <div className="text-[10px] text-muted-foreground tracking-widest uppercase mb-2">Label Style</div>
+
+      <div className="space-y-1">
+        <span className="text-[10px] font-mono text-foreground/70">Marker Icon</span>
+        <div className="flex gap-1">
+          {([['dot', '●'], ['shapes', '△◇'], ['logo', '◎']] as const).map(([type, icon]) => (
+            <button
+              key={type}
+              onClick={() => update('markerType', type)}
+              className={`flex-1 h-6 text-[9px] font-mono rounded border transition-all ${params.markerType === type ? 'bg-foreground/15 border-foreground/40 text-foreground' : 'border-border/50 text-foreground/50 hover:text-foreground/70'}`}
+            >
+              {icon}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-foreground/70">Uppercase</span>
