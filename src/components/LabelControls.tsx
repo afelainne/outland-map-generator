@@ -9,6 +9,7 @@ export interface LabelStyleParams {
   rounded: boolean;
   bgColor: string;
   outlineColor: string;
+  scale: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -18,6 +19,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   rounded: true,
   bgColor: '',
   outlineColor: '',
+  scale: 1,
 };
 
 interface LabelControlsProps {
