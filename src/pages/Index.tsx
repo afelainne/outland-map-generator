@@ -135,6 +135,7 @@ const Index = () => {
             selectedMarkerId={selectedMarkerId}
             mapNumber={mapNumber}
             svgRef={svgRef}
+            seed={seed}
           />
         </div>
 
