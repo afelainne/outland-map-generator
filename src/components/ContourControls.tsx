@@ -74,6 +74,51 @@ const ContourControls = ({ params, onChange }: ContourControlsProps) => {
           className="w-full"
         />
       </div>
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Contour Opacity</span>
+          <span>{Math.round((params.contourOpacity ?? 0.75) * 100)}%</span>
+        </div>
+        <Slider
+          min={0}
+          max={100}
+          step={5}
+          value={[Math.round((params.contourOpacity ?? 0.75) * 100)]}
+          onValueChange={([v]) => update('contourOpacity', v / 100)}
+          className="w-full"
+        />
+      </div>
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Noise Scale</span>
+          <span>{(params.noiseScale ?? 1).toFixed(1)}x</span>
+        </div>
+        <Slider
+          min={2}
+          max={30}
+          step={1}
+          value={[Math.round((params.noiseScale ?? 1) * 10)]}
+          onValueChange={([v]) => update('noiseScale', v / 10)}
+          className="w-full"
+        />
+      </div>
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Octaves</span>
+          <span>{params.octaves ?? 4}</span>
+        </div>
+        <Slider
+          min={1}
+          max={6}
+          step={1}
+          value={[params.octaves ?? 4]}
+          onValueChange={([v]) => update('octaves', v)}
+          className="w-full"
+        />
+      </div>
     </div>
   );
 };

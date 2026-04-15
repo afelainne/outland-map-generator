@@ -191,6 +191,7 @@ const Index = () => {
             svgRef={svgRef}
             seed={seed}
             lineWidth={contourParams.lineWidth}
+            contourOpacity={contourParams.contourOpacity}
             labelMode={labelMode}
             labelStyle={labelStyle}
           />

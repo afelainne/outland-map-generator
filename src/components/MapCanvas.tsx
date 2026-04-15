@@ -27,6 +27,7 @@ interface MapCanvasProps {
   svgRef: React.RefObject<SVGSVGElement | null>;
   seed: number;
   lineWidth?: number;
+  contourOpacity?: number;
   labelMode?: 'number' | 'abbrev' | 'full';
   labelStyle?: LabelStyleParams;
 }
@@ -46,6 +47,7 @@ const MapCanvas = ({
   svgRef,
   seed,
   lineWidth = 1,
+  contourOpacity = 0.75,
   labelMode = 'number',
   labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1 },
 }: MapCanvasProps) => {
@@ -128,13 +130,14 @@ const MapCanvas = ({
         onClick={handleClick}
       >
         <defs>
+          {/* Embed font for SVG export / Figma */}
+          <style>{`@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');`}</style>
           {/* Paper texture filter */}
           <filter id={filterId}>
             <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" result="noise" />
             <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
             <feBlend in="SourceGraphic" in2="gray" mode="multiply" />
           </filter>
-          {/* Arrow marker definition removed - arrows rendered inline */}
         </defs>
 
         {/* Background */}
@@ -154,7 +157,7 @@ const MapCanvas = ({
             fill="none"
             stroke={theme.line}
             strokeWidth={lineWidth}
-            opacity="0.75"
+            opacity={contourOpacity}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
