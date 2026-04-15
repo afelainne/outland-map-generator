@@ -285,16 +285,17 @@ const MapCanvas = ({
 
         {/* Legend inside SVG */}
         {(() => {
-          const legendItemH = 12;
-          const legendPadding = 6;
-          const headerH = 10;
+          const ls = labelStyle.legendScale;
+          const legendItemH = 10 * ls;
+          const legendPadding = 5 * ls;
+          const headerH = 9 * ls;
           const totalH = headerH + dots.length * legendItemH + legendPadding * 2;
-          const legendW = 110;
-          const legendX = width - 14;
-          const legendY = height - totalH - 14;
+          const legendW = 90 * ls;
+          const legendX = width - 12;
+          const legendY = height - totalH - 12;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
           const mType = labelStyle.markerType;
-          const radius = labelStyle.rounded ? 4 : 0;
+          const radius = labelStyle.rounded ? 3 * ls : 0;
 
           return (
             <g>

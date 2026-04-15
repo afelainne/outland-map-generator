@@ -173,6 +173,21 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
           className="w-full"
         />
       </div>
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Legend Size</span>
+          <span>{Math.round(params.legendScale * 100)}%</span>
+        </div>
+        <Slider
+          min={30}
+          max={150}
+          step={5}
+          value={[Math.round(params.legendScale * 100)]}
+          onValueChange={([v]) => update('legendScale', v / 100)}
+          className="w-full"
+        />
+      </div>
     </div>
   );
 };
