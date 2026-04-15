@@ -1,16 +1,10 @@
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
 
 export type MarkerType = 'dot' | 'shapes' | 'logo';
 
 export interface LabelStyleParams {
   uppercase: boolean;
-  opacity: number;
-  outline: boolean;
-  rounded: boolean;
-  bgColor: string;
-  outlineColor: string;
   scale: number;
   markerType: MarkerType;
   markerSize: number;
@@ -26,11 +20,6 @@ export interface LabelStyleParams {
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   uppercase: false,
-  opacity: 0.15,
-  outline: true,
-  rounded: true,
-  bgColor: '',
-  outlineColor: '',
   scale: 1,
   markerType: 'dot',
   markerSize: 1,
@@ -48,60 +37,6 @@ interface LabelControlsProps {
   params: LabelStyleParams;
   onChange: (params: LabelStyleParams) => void;
 }
-
-const COLOR_PRESETS = [
-  { label: 'Theme BG', value: '' },
-  { label: 'Monorail White', value: '#fcfcf5' },
-  { label: 'Foundation Black', value: '#1d1c1a' },
-  { label: 'Industrial Paper', value: '#e0e0e4' },
-  { label: 'Frontier Red', value: '#b0604f' },
-  { label: 'Imagineer Clay', value: '#d9d7cd' },
-  { label: 'Pavilion Bronze', value: '#a09368' },
-  { label: 'Neutral Brown', value: '#837a76' },
-  { label: 'Earth Brown', value: '#48382e' },
-  { label: 'Wanderer Lilac', value: '#d3d1e1' },
-  { label: 'Expo Purple', value: '#3f2c58' },
-  { label: 'New Earth Green', value: '#d8e0d9' },
-  { label: 'Botanical Green', value: '#3a5a42' },
-  { label: 'Skyway Blue', value: '#c6dbc6' },
-  { label: 'Coastal Blue', value: '#429773' },
-  { label: 'Outpost Grey', value: '#919191' },
-  { label: 'Clay Black', value: '#2d2d1f' },
-  { label: 'Observatory Blue', value: '#2d3362' },
-];
-
-const ColorPicker = ({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) => (
-  <div className="space-y-1.5">
-    <span className="text-[10px] font-mono text-foreground/70">{label}</span>
-    <div className="flex gap-1 flex-wrap">
-      {COLOR_PRESETS.map((c) => (
-        <button
-          key={c.value}
-          onClick={() => onChange(c.value)}
-          className={`w-4 h-4 rounded-sm border transition-all ${value === c.value ? 'border-foreground scale-110' : 'border-border/50'}`}
-          style={{ backgroundColor: c.value || 'transparent' }}
-          title={c.label}
-        >
-          {c.value === '' && <span className="text-[6px] text-muted-foreground leading-none block text-center">T</span>}
-        </button>
-      ))}
-    </div>
-    <div className="flex items-center gap-1.5">
-      <input
-        type="color"
-        value={value || '#000000'}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-5 h-5 rounded-sm border border-border cursor-pointer p-0 bg-transparent"
-      />
-      <Input
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="Theme BG"
-        className="h-5 text-[9px] font-mono px-1.5 flex-1"
-      />
-    </div>
-  </div>
-);
 
 const LabelControls = ({ params, onChange }: LabelControlsProps) => {
   const update = <K extends keyof LabelStyleParams>(key: K, value: LabelStyleParams[K]) => {
@@ -172,37 +107,6 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
         <span className="text-[10px] font-mono text-foreground/70">Uppercase</span>
         <Switch checked={params.uppercase} onCheckedChange={(v) => update('uppercase', v)} className="scale-75" />
       </div>
-
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] font-mono text-foreground/70">Outline</span>
-        <Switch checked={params.outline} onCheckedChange={(v) => update('outline', v)} className="scale-75" />
-      </div>
-
-      <div className="flex items-center justify-between">
-        <span className="text-[10px] font-mono text-foreground/70">Rounded</span>
-        <Switch checked={params.rounded} onCheckedChange={(v) => update('rounded', v)} className="scale-75" />
-      </div>
-
-      <div className="space-y-1">
-        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
-          <span>BG Opacity</span>
-          <span>{Math.round(params.opacity * 100)}%</span>
-        </div>
-        <Slider
-          min={0}
-          max={100}
-          step={5}
-          value={[Math.round(params.opacity * 100)]}
-          onValueChange={([v]) => update('opacity', v / 100)}
-          className="w-full"
-        />
-      </div>
-
-      <ColorPicker label="BG Color" value={params.bgColor} onChange={(v) => update('bgColor', v)} />
-
-      {params.outline && (
-        <ColorPicker label="Outline Color" value={params.outlineColor} onChange={(v) => update('outlineColor', v)} />
-      )}
 
       <div className="space-y-1">
         <div className="flex justify-between text-[10px] font-mono text-foreground/70">
