@@ -72,12 +72,12 @@ const MapCanvas = ({
     const go = labelStyle.gridOpacity;
     for (let x = spacing; x < width; x += spacing) {
       lines.push(
-        <line key={`v-${x}`} x1={x} y1={0} x2={x} y2={height} stroke={theme.grid} strokeWidth="0.5" opacity={go} />
+        <line key={`v-${x}`} x1={x} y1={0} x2={x} y2={height} stroke={theme.grid} strokeWidth="1" opacity={go} />
       );
     }
     for (let y = spacing; y < height; y += spacing) {
       lines.push(
-        <line key={`h-${y}`} x1={0} y1={y} x2={width} y2={y} stroke={theme.grid} strokeWidth="0.5" opacity={go} />
+        <line key={`h-${y}`} x1={0} y1={y} x2={width} y2={y} stroke={theme.grid} strokeWidth="1" opacity={go} />
       );
     }
     return lines;
