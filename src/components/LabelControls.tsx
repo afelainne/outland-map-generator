@@ -21,6 +21,7 @@ export interface LabelStyleParams {
   lineElementSize: number;
   showLegend: boolean;
   showBranding: boolean;
+  gridOpacity: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -40,6 +41,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   lineElementSize: 1,
   showLegend: true,
   showBranding: true,
+  gridOpacity: 0.5,
 };
 
 interface LabelControlsProps {
@@ -76,6 +78,21 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-foreground/70">Logo & Title</span>
         <Switch checked={params.showBranding} onCheckedChange={(v) => update('showBranding', v)} className="scale-75" />
+      </div>
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Grid Opacity</span>
+          <span>{Math.round(params.gridOpacity * 100)}%</span>
+        </div>
+        <Slider
+          min={0}
+          max={100}
+          step={5}
+          value={[Math.round(params.gridOpacity * 100)]}
+          onValueChange={([v]) => update('gridOpacity', v / 100)}
+          className="w-full"
+        />
       </div>
 
       <div className="flex items-center justify-between">

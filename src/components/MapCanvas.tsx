@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true },
+  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5 },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -69,18 +69,19 @@ const MapCanvas = ({
   const gridLines = useMemo(() => {
     const lines: JSX.Element[] = [];
     const spacing = 50;
+    const go = labelStyle.gridOpacity;
     for (let x = spacing; x < width; x += spacing) {
       lines.push(
-        <line key={`v-${x}`} x1={x} y1={0} x2={x} y2={height} stroke={theme.grid} strokeWidth="0.5" opacity="0.5" />
+        <line key={`v-${x}`} x1={x} y1={0} x2={x} y2={height} stroke={theme.grid} strokeWidth="0.5" opacity={go} />
       );
     }
     for (let y = spacing; y < height; y += spacing) {
       lines.push(
-        <line key={`h-${y}`} x1={0} y1={y} x2={width} y2={y} stroke={theme.grid} strokeWidth="0.5" opacity="0.5" />
+        <line key={`h-${y}`} x1={0} y1={y} x2={width} y2={y} stroke={theme.grid} strokeWidth="0.5" opacity={go} />
       );
     }
     return lines;
-  }, [width, height, theme.grid]);
+  }, [width, height, theme.grid, labelStyle.gridOpacity]);
 
   // Generate paper texture noise pattern
   const textureId = `texture-${seed}`;
@@ -403,9 +404,10 @@ const MapCanvas = ({
           const legendPadding = 5 * ls;
           const headerH = 9 * ls;
           const totalH = headerH + dots.length * legendItemH + legendPadding * 2;
-          const charW = labelStyle.uppercase ? 3.2 * ls : 2.8 * ls;
+          const fontSize = 4.5 * ls;
+          const charW = labelStyle.uppercase ? fontSize * 0.65 : fontSize * 0.55;
           const maxNameLen = Math.max(...dots.map(d => (d.name || '').length), 5);
-          const legendW = Math.max(90 * ls, legendPadding * 2 + 12 * ls + maxNameLen * charW * (4.5 * ls / 10));
+          const legendW = legendPadding * 2 + 12 * ls + maxNameLen * charW + 4 * ls;
           const legendX = width - 12;
           const legendY = height - totalH - 12;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
