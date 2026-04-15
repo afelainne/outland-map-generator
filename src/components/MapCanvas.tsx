@@ -132,20 +132,7 @@ const MapCanvas = ({
             <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
             <feBlend in="SourceGraphic" in2="gray" mode="multiply" />
           </filter>
-          {/* Arrow marker for contour direction */}
-          {labelStyle.showArrows && (
-            <marker
-              id={`arrow-${seed}`}
-              viewBox="0 0 6 6"
-              refX="3"
-              refY="3"
-              markerWidth="4"
-              markerHeight="4"
-              orient="auto"
-            >
-              <path d="M0,1 L3,3 L0,5" fill="none" stroke={theme.line} strokeWidth="1" />
-            </marker>
-          )}
+          {/* Arrow marker definition removed - arrows rendered inline */}
         </defs>
 
         {/* Background */}
