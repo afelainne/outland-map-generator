@@ -14,6 +14,7 @@ export interface LabelStyleParams {
   scale: number;
   markerType: MarkerType;
   markerSize: number;
+  shapeScale: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -26,6 +27,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   scale: 1,
   markerType: 'dot',
   markerSize: 1,
+  shapeScale: 1,
 };
 
 interface LabelControlsProps {
@@ -154,7 +156,7 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
 
       <div className="space-y-1">
         <div className="flex justify-between text-[10px] font-mono text-foreground/70">
-          <span>Marker Size</span>
+          <span>Name Icon Size</span>
           <span>{Math.round(params.markerSize * 100)}%</span>
         </div>
         <Slider
@@ -163,6 +165,21 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
           step={10}
           value={[Math.round(params.markerSize * 100)]}
           onValueChange={([v]) => update('markerSize', v / 100)}
+          className="w-full"
+        />
+      </div>
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Shape Size</span>
+          <span>{Math.round(params.shapeScale * 100)}%</span>
+        </div>
+        <Slider
+          min={30}
+          max={300}
+          step={10}
+          value={[Math.round(params.shapeScale * 100)]}
+          onValueChange={([v]) => update('shapeScale', v / 100)}
           className="w-full"
         />
       </div>
