@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7 },
+  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -204,7 +204,7 @@ const MapCanvas = ({
             <g key={`dot-${i}`}>
               {renderDotMarker()}
               <rect
-                x={dot.x + dotR + 4}
+                x={dot.x + dotR + 2}
                 y={dot.y - textH / 2}
                 width={textW}
                 height={textH}
@@ -217,7 +217,7 @@ const MapCanvas = ({
                 strokeOpacity={isFullOpacity ? 1 : 0.6}
               />
               <text
-                x={dot.x + dotR + 6 * s + 4}
+                x={dot.x + dotR + 4 * s + 2}
                 y={dot.y + fontSize * 0.35}
                 fill={theme.text}
                 fontSize={fontSize}
@@ -257,7 +257,7 @@ const MapCanvas = ({
         </text>
 
         {/* Markers (shapes only, no labels) */}
-        {markers.map((m) => (
+        {labelStyle.showShapes && markers.map((m) => (
           <g
             key={m.id}
             onClick={(e) => {

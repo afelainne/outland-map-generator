@@ -16,6 +16,7 @@ export interface LabelStyleParams {
   markerSize: number;
   shapeScale: number;
   legendScale: number;
+  showShapes: boolean;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -30,6 +31,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   markerSize: 1,
   shapeScale: 1,
   legendScale: 0.7,
+  showShapes: true,
 };
 
 interface LabelControlsProps {
@@ -92,6 +94,11 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
 
 
 
+
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] font-mono text-foreground/70">Show Shapes</span>
+        <Switch checked={params.showShapes} onCheckedChange={(v) => update('showShapes', v)} className="scale-75" />
+      </div>
 
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-foreground/70">Uppercase</span>
