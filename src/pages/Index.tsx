@@ -32,6 +32,7 @@ const Index = () => {
   const [resolution, setResolution] = useState('2x');
   const [contourParams, setContourParams] = useState<ContourParams>(DEFAULT_CONTOUR_PARAMS);
   const [labelMode, setLabelMode] = useState<'number' | 'abbrev' | 'full'>('number');
+  const [labelStyle, setLabelStyle] = useState<LabelStyleParams>(DEFAULT_LABEL_STYLE);
   const svgRef = useRef<SVGSVGElement>(null);
 
   const theme = MAP_THEMES.find((t) => t.id === themeId) || MAP_THEMES[0];
