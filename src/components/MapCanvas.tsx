@@ -16,6 +16,7 @@ interface MapCanvasProps {
   mapNumber: number;
   svgRef: React.RefObject<SVGSVGElement | null>;
   seed: number;
+  lineWidth?: number;
 }
 
 const MapCanvas = ({
@@ -32,6 +33,7 @@ const MapCanvas = ({
   mapNumber,
   svgRef,
   seed,
+  lineWidth = 1,
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -129,7 +131,7 @@ const MapCanvas = ({
 
         {/* Contour lines - smooth flowing curves */}
         {contourPaths.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke={theme.line} strokeWidth="1.2" opacity="0.75" strokeLinecap="round" strokeLinejoin="round" />
+          <path key={i} d={d} fill="none" stroke={theme.line} strokeWidth={lineWidth} opacity="0.75" strokeLinecap="round" strokeLinejoin="round" />
         ))}
 
         {/* Scatter dots - filled circles like references */}
