@@ -374,7 +374,7 @@ const MapCanvas = ({
                 opacity="0.5"
                 style={{ fontFamily: "'Space Mono', monospace" }}
               >
-                LOCATIONS
+                WORLDS
               </text>
               {dots.map((dot, i) => {
                 const itemY = legendY + legendPadding + headerH + i * legendItemH + legendItemH / 2;

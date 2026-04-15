@@ -133,7 +133,7 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
               <span>{params.arrowSpacing}px</span>
             </div>
             <Slider
-              min={20}
+              min={3}
               max={200}
               step={10}
               value={[params.arrowSpacing]}
