@@ -42,9 +42,9 @@ const Index = () => {
   const terrain = TERRAIN_PRESETS.find((t) => t.id === terrainId) || TERRAIN_PRESETS[0];
   const mapNumber = useMemo(() => (seed % 99) + 1, [seed]);
 
-  const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain, contourParams), [seed, terrain, contourParams]);
-  const dots = useMemo(() => generateScatterDots(MAP_W, MAP_H, seed, 50), [seed]);
-  const generatedMarkers = useMemo(() => generateMarkers(MAP_W, MAP_H, seed, 15), [seed]);
+  const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain, contourParams), [MAP_W, MAP_H, seed, terrain, contourParams]);
+  const dots = useMemo(() => generateScatterDots(MAP_W, MAP_H, seed, 50), [MAP_W, MAP_H, seed]);
+  const generatedMarkers = useMemo(() => generateMarkers(MAP_W, MAP_H, seed, 15), [MAP_W, MAP_H, seed]);
   const allMarkers = useMemo(() => {
     const combined = [...generatedMarkers, ...customMarkers];
     return combined.map(m => ({
