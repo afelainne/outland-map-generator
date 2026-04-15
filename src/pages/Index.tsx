@@ -8,6 +8,8 @@ import MarkerPanel from '@/components/MarkerPanel';
 import ExportBar from '@/components/ExportBar';
 import OutlandLogo from '@/components/OutlandLogo';
 import ContourControls from '@/components/ContourControls';
+import LabelControls, { DEFAULT_LABEL_STYLE } from '@/components/LabelControls';
+import type { LabelStyleParams } from '@/components/LabelControls';
 import { useMapExport } from '@/hooks/useMapExport';
 import {
   Select,
