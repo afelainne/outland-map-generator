@@ -2,6 +2,8 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 
+export type MarkerType = 'dot' | 'shapes' | 'logo';
+
 export interface LabelStyleParams {
   uppercase: boolean;
   opacity: number;
@@ -10,6 +12,7 @@ export interface LabelStyleParams {
   bgColor: string;
   outlineColor: string;
   scale: number;
+  markerType: MarkerType;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -20,6 +23,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   bgColor: '',
   outlineColor: '',
   scale: 1,
+  markerType: 'dot',
 };
 
 interface LabelControlsProps {
