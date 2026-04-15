@@ -344,7 +344,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
                 fill={theme.text}
                 fontSize={fontSize}
                 opacity="0.9"
-                style={{ fontFamily: "'Space Mono', monospace" }}
+                style={{ fontFamily: "'IBM Plex Mono', monospace" }}
               >
                 {labelText}
               </text>
@@ -372,7 +372,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
               fontSize="9"
               letterSpacing="3"
               opacity="0.8"
-              style={{ fontFamily: "'Space Mono', monospace" }}
+              style={{ fontFamily: "'IBM Plex Mono', monospace" }}
             >
               OUTLAND MAP
             </text>
@@ -388,7 +388,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
           fontSize="72"
           fontWeight="bold"
           opacity="0.12"
-          style={{ fontFamily: "'Space Mono', monospace" }}
+          style={{ fontFamily: "'IBM Plex Mono', monospace" }}
         >
           {String(mapNumber).padStart(2, '0')}
         </text>
@@ -445,7 +445,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
                 fontSize={4 * ls}
                 letterSpacing={1.5 * ls}
                 opacity="0.5"
-                style={{ fontFamily: "'Space Mono', monospace" }}
+                style={{ fontFamily: "'IBM Plex Mono', monospace" }}
               >
                 WORLDS
               </text>
@@ -497,7 +497,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
                       y={itemY + 2 * ls}
                       fill={theme.text}
                       fontSize={4.5 * ls}
-                      style={{ fontFamily: "'Space Mono', monospace" }}
+                      style={{ fontFamily: "'IBM Plex Mono', monospace" }}
                     >
                       {displayName}
                     </text>

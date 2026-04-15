@@ -45,7 +45,7 @@ const ExportBar = ({ resolution, onResolutionChange, onExport, canvasPresetId, o
   const preset = CANVAS_PRESETS.find(p => p.id === canvasPresetId) || CANVAS_PRESETS[0];
 
   return (
-    <div className="flex items-center gap-2 p-2" style={{ fontFamily: "'Space Mono', monospace" }}>
+    <div className="flex items-center gap-2 p-2" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
       {/* Canvas size preset */}
       <Select value={canvasPresetId} onValueChange={onCanvasPresetChange}>
         <SelectTrigger className="w-40 h-8 text-xs font-mono">
