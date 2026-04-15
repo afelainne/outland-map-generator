@@ -307,14 +307,44 @@ const MapCanvas = ({
           </>
         )}
 
+        {/* Large map number - faint background */}
+        <text
+          x={width - 30}
+          y={100}
+          textAnchor="end"
+          fill={theme.text}
+          fontSize="72"
+          fontWeight="bold"
+          opacity="0.12"
+          style={{ fontFamily: "'Space Mono', monospace" }}
+        >
+          {String(mapNumber).padStart(2, '0')}
+        </text>
+
+        {/* Markers (shapes only, no labels) */}
+        {labelStyle.showShapes && markers.map((m) => (
+          <g
+            key={m.id}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelectMarker(m.id);
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            {renderMarkerShape(m)}
+          </g>
+        ))}
+
         {/* Legend inside SVG */}
-        {(() => {
+        {labelStyle.showLegend && (() => {
           const ls = labelStyle.legendScale;
           const legendItemH = 10 * ls;
           const legendPadding = 5 * ls;
           const headerH = 9 * ls;
           const totalH = headerH + dots.length * legendItemH + legendPadding * 2;
-          const legendW = 90 * ls;
+          const charW = labelStyle.uppercase ? 3.2 * ls : 2.8 * ls;
+          const maxNameLen = Math.max(...dots.map(d => (d.name || '').length), 5);
+          const legendW = Math.max(90 * ls, legendPadding * 2 + 12 * ls + maxNameLen * charW * (4.5 * ls / 10));
           const legendX = width - 12;
           const legendY = height - totalH - 12;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
