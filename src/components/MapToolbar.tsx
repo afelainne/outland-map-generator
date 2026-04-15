@@ -1,5 +1,6 @@
-import { Circle, Square, Triangle, Diamond, MousePointer, RefreshCw, Shuffle, Type } from 'lucide-react';
+import { Circle, Square, Triangle, Diamond, MousePointer, RefreshCw, Shuffle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import type { MarkerType } from '@/components/LabelControls';
 
 type Tool = 'select' | 'circle' | 'square' | 'triangle' | 'diamond';
 type LabelMode = 'number' | 'abbrev' | 'full';
@@ -11,6 +12,8 @@ interface MapToolbarProps {
   onRandomizeAll: () => void;
   labelMode: LabelMode;
   onCycleLabelMode: () => void;
+  markerType: MarkerType;
+  onMarkerTypeChange: (type: MarkerType) => void;
 }
 
 const tools: { id: Tool; icon: React.ReactNode; label: string }[] = [
@@ -33,7 +36,13 @@ const labelModeTitles: Record<LabelMode, string> = {
   full: 'Labels: Full Names',
 };
 
-const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, labelMode, onCycleLabelMode }: MapToolbarProps) => {
+const markerTypeIcons: { id: MarkerType; icon: string; label: string }[] = [
+  { id: 'dot', icon: '●', label: 'Filled Dot' },
+  { id: 'shapes', icon: '△◇', label: 'Geometric Shapes' },
+  { id: 'logo', icon: '◎', label: 'Logo Icon' },
+];
+
+const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, labelMode, onCycleLabelMode, markerType, onMarkerTypeChange }: MapToolbarProps) => {
   return (
     <div className="flex flex-col gap-1 p-2 bg-card/80 backdrop-blur border border-border rounded-lg">
       {tools.map((tool) => (
@@ -46,6 +55,19 @@ const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, la
           className="w-9 h-9"
         >
           {tool.icon}
+        </Button>
+      ))}
+      <div className="h-px bg-border my-1" />
+      {markerTypeIcons.map((mt) => (
+        <Button
+          key={mt.id}
+          variant={markerType === mt.id ? 'default' : 'ghost'}
+          size="icon"
+          onClick={() => onMarkerTypeChange(mt.id)}
+          title={mt.label}
+          className="w-9 h-9 text-[10px] font-mono"
+        >
+          {mt.icon}
         </Button>
       ))}
       <div className="h-px bg-border my-1" />
