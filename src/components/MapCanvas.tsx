@@ -128,13 +128,14 @@ const MapCanvas = ({
         onClick={handleClick}
       >
         <defs>
+          {/* Embed font for SVG export / Figma */}
+          <style>{`@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');`}</style>
           {/* Paper texture filter */}
           <filter id={filterId}>
             <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" result="noise" />
             <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
             <feBlend in="SourceGraphic" in2="gray" mode="multiply" />
           </filter>
-          {/* Arrow marker definition removed - arrows rendered inline */}
         </defs>
 
         {/* Background */}
@@ -154,7 +155,7 @@ const MapCanvas = ({
             fill="none"
             stroke={theme.line}
             strokeWidth={lineWidth}
-            opacity="0.75"
+            opacity={labelStyle.contourOpacity ?? 0.75}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
