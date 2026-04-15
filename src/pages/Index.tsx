@@ -57,12 +57,27 @@ const Index = () => {
     setSeed(Math.floor(Math.random() * 100000));
     setCustomMarkers([]);
     setSelectedMarkerId(null);
-    // Randomize theme
+    // Randomize theme from palette combinations
     const rndTheme = MAP_THEMES[Math.floor(Math.random() * MAP_THEMES.length)];
     setThemeId(rndTheme.id);
     // Randomize terrain
     const rndTerrain = TERRAIN_PRESETS[Math.floor(Math.random() * TERRAIN_PRESETS.length)];
     setTerrainId(rndTerrain.id);
+    // Randomize label style colors from palette pairs
+    const palettePairs = [
+      { bg: '#fcfcf5', outline: '#1d1c1a' },
+      { bg: '#e0e0e4', outline: '#b0604f' },
+      { bg: '#d9d7cd', outline: '#a09368' },
+      { bg: '#837a76', outline: '#48382e' },
+      { bg: '#d3d1e1', outline: '#3f2c58' },
+      { bg: '#d8e0d9', outline: '#3a5a42' },
+      { bg: '#c6dbc6', outline: '#429773' },
+      { bg: '#1d1c1a', outline: '#fcfcf5' },
+      { bg: '#919191', outline: '#2d2d1f' },
+      { bg: '#2d3362', outline: '#c6dbc6' },
+    ];
+    const rndPair = palettePairs[Math.floor(Math.random() * palettePairs.length)];
+    setLabelStyle((prev) => ({ ...prev, bgColor: rndPair.bg, outlineColor: rndPair.outline }));
   }, []);
 
   const handleAddMarker = useCallback(
