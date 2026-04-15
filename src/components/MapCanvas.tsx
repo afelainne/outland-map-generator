@@ -161,7 +161,7 @@ const MapCanvas = ({
           const bgFill = labelStyle.bgColor || theme.bg;
           const strokeColor = labelStyle.outlineColor || theme.bg;
           const isFullOpacity = labelStyle.opacity >= 1;
-          const dotR = dot.r * s;
+          const dotR = dot.r * s * labelStyle.markerSize;
           const mType = labelStyle.markerType;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
           const shapeType = shapes[i % shapes.length];
