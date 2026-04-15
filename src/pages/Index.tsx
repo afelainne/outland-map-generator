@@ -76,16 +76,18 @@ const Index = () => {
   const handleAddMarker = useCallback(
     (x: number, y: number) => {
       const nextNum = allMarkers.length + 1;
-      const rndName = LOCATION_NAMES[Math.floor(Math.random() * LOCATION_NAMES.length)];
+      const markerId = `custom-${Date.now()}`;
       const newMarker: MapMarker = {
-        id: `custom-${Date.now()}`,
+        id: markerId,
         x,
         y,
         number: nextNum,
-        name: rndName,
+        name: 'New Location',
         shape: activeTool as MapMarker['shape'],
       };
       setCustomMarkers((prev) => [...prev, newMarker]);
+      // Auto-select so the rename panel appears
+      setSelectedMarkerId(markerId);
     },
     [allMarkers.length, activeTool]
   );

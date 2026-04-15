@@ -288,6 +288,59 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
           className="w-full"
         />
       </div>
+
+      {/* Opacity Controls Section */}
+      <div className="border-t border-border pt-3 mt-3">
+        <div className="text-[10px] text-muted-foreground tracking-widest uppercase mb-2">Opacity</div>
+
+        <div className="space-y-1">
+          <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+            <span>Name Icons</span>
+            <span>{Math.round((params.nameIconOpacity ?? 0.9) * 100)}%</span>
+          </div>
+          <Slider min={0} max={100} step={5} value={[Math.round((params.nameIconOpacity ?? 0.9) * 100)]} onValueChange={([v]) => update('nameIconOpacity', v / 100)} className="w-full" />
+        </div>
+
+        <div className="space-y-1">
+          <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+            <span>Name Text</span>
+            <span>{Math.round((params.nameTextOpacity ?? 0.9) * 100)}%</span>
+          </div>
+          <Slider min={0} max={100} step={5} value={[Math.round((params.nameTextOpacity ?? 0.9) * 100)]} onValueChange={([v]) => update('nameTextOpacity', v / 100)} className="w-full" />
+        </div>
+
+        <div className="space-y-1">
+          <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+            <span>Board Number</span>
+            <span>{Math.round((params.boardNumberOpacity ?? 0.12) * 100)}%</span>
+          </div>
+          <Slider min={0} max={100} step={1} value={[Math.round((params.boardNumberOpacity ?? 0.12) * 100)]} onValueChange={([v]) => update('boardNumberOpacity', v / 100)} className="w-full" />
+        </div>
+
+        <div className="space-y-1">
+          <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+            <span>Logo & Title</span>
+            <span>{Math.round((params.logoOpacity ?? 0.85) * 100)}%</span>
+          </div>
+          <Slider min={0} max={100} step={5} value={[Math.round((params.logoOpacity ?? 0.85) * 100)]} onValueChange={([v]) => update('logoOpacity', v / 100)} className="w-full" />
+        </div>
+
+        <div className="space-y-1">
+          <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+            <span>Legend</span>
+            <span>{Math.round((params.legendOpacity ?? 0.8) * 100)}%</span>
+          </div>
+          <Slider min={0} max={100} step={5} value={[Math.round((params.legendOpacity ?? 0.8) * 100)]} onValueChange={([v]) => update('legendOpacity', v / 100)} className="w-full" />
+        </div>
+
+        <div className="space-y-1">
+          <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+            <span>Marker Shapes</span>
+            <span>{Math.round((params.shapeOpacity ?? 1) * 100)}%</span>
+          </div>
+          <Slider min={0} max={100} step={5} value={[Math.round((params.shapeOpacity ?? 1) * 100)]} onValueChange={([v]) => update('shapeOpacity', v / 100)} className="w-full" />
+        </div>
+      </div>
     </div>
   );
 };
