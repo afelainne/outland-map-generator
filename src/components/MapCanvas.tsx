@@ -88,7 +88,7 @@ const MapCanvas = ({
 
   const renderMarkerShape = (m: MapMarker) => {
     const isSelected = m.id === selectedMarkerId;
-    const size = 6;
+    const size = 6 * labelStyle.markerSize;
     const strokeW = isSelected ? 2 : 1.2;
 
     switch (m.shape) {
