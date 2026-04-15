@@ -20,6 +20,8 @@ export interface LabelStyleParams {
   showArrows: boolean;
   arrowSpacing: number;
   arrowSize: number;
+  showLegend: boolean;
+  showBranding: boolean;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -38,6 +40,8 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   showArrows: false,
   arrowSpacing: 80,
   arrowSize: 1,
+  showLegend: true,
+  showBranding: true,
 };
 
 interface LabelControlsProps {
@@ -100,6 +104,16 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
 
 
 
+
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] font-mono text-foreground/70">Legend</span>
+        <Switch checked={params.showLegend} onCheckedChange={(v) => update('showLegend', v)} className="scale-75" />
+      </div>
+
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] font-mono text-foreground/70">Logo & Title</span>
+        <Switch checked={params.showBranding} onCheckedChange={(v) => update('showBranding', v)} className="scale-75" />
+      </div>
 
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-foreground/70">Show Shapes</span>
