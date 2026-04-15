@@ -393,21 +393,29 @@ export interface ScatterDot {
   x: number;
   y: number;
   r: number;
+  name: string;
 }
 
 export function generateScatterDots(
   width: number,
   height: number,
   seed: number,
-  count: number = 60
+  count: number = 30
 ): ScatterDot[] {
   const rng = seedRng(seed + 999);
+  const names = [...LOCATION_NAMES];
+  // Shuffle names
+  for (let i = names.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [names[i], names[j]] = [names[j], names[i]];
+  }
   const dots: ScatterDot[] = [];
   for (let i = 0; i < count; i++) {
     dots.push({
-      x: rng() * width * 0.9 + width * 0.05,
-      y: rng() * height * 0.9 + height * 0.05,
-      r: rng() * 10 + 1,
+      x: rng() * width * 0.85 + width * 0.075,
+      y: rng() * height * 0.85 + height * 0.075,
+      r: rng() * 6 + 2,
+      name: names[i % names.length],
     });
   }
   return dots;

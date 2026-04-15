@@ -145,10 +145,44 @@ const MapCanvas = ({
           <path key={i} d={d} fill="none" stroke={theme.line} strokeWidth={lineWidth} opacity="0.75" strokeLinecap="round" strokeLinejoin="round" />
         ))}
 
-        {/* Scatter dots - filled circles like references */}
-        {dots.map((dot, i) => (
-          <circle key={`dot-${i}`} cx={dot.x} cy={dot.y} r={dot.r} fill={theme.dot} opacity="0.7" />
-        ))}
+        {/* Location name labels with dot containers */}
+        {dots.map((dot, i) => {
+          const labelText = dot.name;
+          const charWidth = 3.8;
+          const textW = labelText.length * charWidth + 12;
+          const textH = 14;
+          return (
+            <g key={`dot-${i}`} opacity="0.85">
+              {/* Dot marker */}
+              <circle cx={dot.x} cy={dot.y} r={dot.r} fill={theme.dot} opacity="0.9" />
+              {/* Label container */}
+              <rect
+                x={dot.x + dot.r + 4}
+                y={dot.y - textH / 2}
+                width={textW}
+                height={textH}
+                rx={3}
+                ry={3}
+                fill={theme.dot}
+                opacity="0.15"
+                stroke={theme.dot}
+                strokeWidth="0.5"
+                strokeOpacity="0.4"
+              />
+              {/* Label text */}
+              <text
+                x={dot.x + dot.r + 10}
+                y={dot.y + 3.5}
+                fill={theme.text}
+                fontSize="7"
+                opacity="0.75"
+                style={{ fontFamily: "'Space Mono', monospace" }}
+              >
+                {labelText}
+              </text>
+            </g>
+          );
+        })}
 
         {/* Accent block */}
         <rect x={20} y={height - blockH - 20} width={blockW} height={blockH} fill={theme.accentBlock} opacity="0.85" />
