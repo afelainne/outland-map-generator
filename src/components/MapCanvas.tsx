@@ -2,6 +2,15 @@ import { useRef, useCallback, useMemo } from 'react';
 import type { MapTheme } from '@/lib/themes';
 import type { MapMarker, ScatterDot } from '@/lib/noise';
 
+/** Create abbreviation from name: "Department of Imagination" → "D.O.I." */
+function abbreviate(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter((w) => w.length > 0)
+    .map((w) => w[0].toUpperCase())
+    .join('.') + '.';
+}
+
 interface MapCanvasProps {
   width: number;
   height: number;
