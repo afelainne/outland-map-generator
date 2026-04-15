@@ -103,6 +103,11 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
       </div>
 
       <div className="flex items-center justify-between">
+        <span className="text-[10px] font-mono text-foreground/70">Contour Arrows</span>
+        <Switch checked={params.showArrows} onCheckedChange={(v) => update('showArrows', v)} className="scale-75" />
+      </div>
+
+      <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-foreground/70">Uppercase</span>
         <Switch checked={params.uppercase} onCheckedChange={(v) => update('uppercase', v)} className="scale-75" />
       </div>
