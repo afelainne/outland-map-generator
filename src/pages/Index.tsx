@@ -5,7 +5,7 @@ import { MAP_THEMES } from '@/lib/themes';
 import MapCanvas from '@/components/MapCanvas';
 import MapToolbar from '@/components/MapToolbar';
 import MarkerPanel from '@/components/MarkerPanel';
-import ExportBar from '@/components/ExportBar';
+import ExportBar, { CANVAS_PRESETS } from '@/components/ExportBar';
 import OutlandLogo from '@/components/OutlandLogo';
 import ContourControls from '@/components/ContourControls';
 import LabelControls, { DEFAULT_LABEL_STYLE } from '@/components/LabelControls';
@@ -19,9 +19,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const MAP_W = 800;
-const MAP_H = 800;
-
 const Index = () => {
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 100000));
   const [themeId, setThemeId] = useState('monorail');
@@ -30,6 +27,11 @@ const Index = () => {
   const [customMarkers, setCustomMarkers] = useState<MapMarker[]>([]);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
+  const [canvasPresetId, setCanvasPresetId] = useState('square');
+
+  const canvasPreset = CANVAS_PRESETS.find(p => p.id === canvasPresetId) || CANVAS_PRESETS[0];
+  const MAP_W = canvasPreset.width;
+  const MAP_H = canvasPreset.height;
   const [contourParams, setContourParams] = useState<ContourParams>(DEFAULT_CONTOUR_PARAMS);
   const [labelMode, setLabelMode] = useState<'number' | 'abbrev' | 'full'>('number');
   const [labelStyle, setLabelStyle] = useState<LabelStyleParams>(DEFAULT_LABEL_STYLE);
@@ -146,7 +148,7 @@ const Index = () => {
               ))}
             </SelectContent>
           </Select>
-          <ExportBar resolution={resolution} onResolutionChange={setResolution} onExport={handleExport} />
+          <ExportBar resolution={resolution} onResolutionChange={setResolution} onExport={handleExport} canvasPresetId={canvasPresetId} onCanvasPresetChange={setCanvasPresetId} />
         </div>
       </header>
 
