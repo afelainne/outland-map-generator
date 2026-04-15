@@ -26,6 +26,7 @@ const Index = () => {
   const [activeTool, setActiveTool] = useState<'select' | 'circle' | 'square' | 'triangle' | 'diamond'>('select');
   const [globalShape, setGlobalShape] = useState<'circle' | 'square' | 'triangle' | 'diamond'>('circle');
   const [customMarkers, setCustomMarkers] = useState<MapMarker[]>([]);
+  const [renamedMarkers, setRenamedMarkers] = useState<Record<string, string>>({});
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
   const [canvasPresetId, setCanvasPresetId] = useState('square');
