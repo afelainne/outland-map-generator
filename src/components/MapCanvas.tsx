@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true },
+  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -132,6 +132,7 @@ const MapCanvas = ({
             <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
             <feBlend in="SourceGraphic" in2="gray" mode="multiply" />
           </filter>
+          {/* Arrow marker definition removed - arrows rendered inline */}
         </defs>
 
         {/* Background */}
@@ -145,8 +146,57 @@ const MapCanvas = ({
 
         {/* Contour lines - smooth flowing curves */}
         {contourPaths.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke={theme.line} strokeWidth={lineWidth} opacity="0.75" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            key={i}
+            d={d}
+            fill="none"
+            stroke={theme.line}
+            strokeWidth={lineWidth}
+            opacity="0.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         ))}
+
+        {/* Direction arrows on contour lines */}
+        {labelStyle.showArrows && contourPaths.map((d, i) => {
+          // Parse path points from the d attribute to place arrows
+          const points: { x: number; y: number }[] = [];
+          const regex = /[ML]\s*([\d.e+-]+)[,\s]+([\d.e+-]+)|C\s*([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)/g;
+          let match;
+          while ((match = regex.exec(d)) !== null) {
+            if (match[1] !== undefined) {
+              points.push({ x: parseFloat(match[1]), y: parseFloat(match[2]) });
+            } else if (match[7] !== undefined) {
+              // Take the endpoint of cubic bezier
+              points.push({ x: parseFloat(match[7]), y: parseFloat(match[8]) });
+            }
+          }
+          if (points.length < 3) return null;
+          // Place arrows every ~80px along the path
+          const arrowSpacing = 80;
+          const arrows: JSX.Element[] = [];
+          let dist = 0;
+          let nextArrowAt = arrowSpacing * 0.5;
+          for (let j = 1; j < points.length; j++) {
+            const dx = points[j].x - points[j - 1].x;
+            const dy = points[j].y - points[j - 1].y;
+            const segLen = Math.sqrt(dx * dx + dy * dy);
+            dist += segLen;
+            if (dist >= nextArrowAt && segLen > 0.5) {
+              const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+              const mx = (points[j].x + points[j - 1].x) / 2;
+              const my = (points[j].y + points[j - 1].y) / 2;
+              arrows.push(
+                <g key={`${i}-${j}`} transform={`translate(${mx}, ${my}) rotate(${angle})`}>
+                  <path d="M-3,-2.5 L1,0 L-3,2.5" fill="none" stroke={theme.line} strokeWidth="0.8" opacity="0.6" />
+                </g>
+              );
+              nextArrowAt = dist + arrowSpacing;
+            }
+          }
+          return <g key={`arrows-${i}`}>{arrows}</g>;
+        })}
 
         {/* Location name labels with dot containers */}
         {dots.map((dot, i) => {
