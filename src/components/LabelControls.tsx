@@ -69,7 +69,6 @@ const COLOR_PRESETS = [
   { label: 'Clay Black', value: '#2d2d1f' },
   { label: 'Observatory Blue', value: '#2d3362' },
 ];
-];
 
 const ColorPicker = ({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) => (
   <div className="space-y-1.5">
