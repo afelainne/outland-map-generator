@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo, useCallback } from 'react';
-import { generateContourLines, generateScatterDots, generateMarkers, LOCATION_NAMES } from '@/lib/noise';
+import { generateContourLines, generateScatterDots, generateMarkers, LOCATION_NAMES, TERRAIN_PRESETS } from '@/lib/noise';
 import type { MapMarker } from '@/lib/noise';
 import { MAP_THEMES } from '@/lib/themes';
 import MapCanvas from '@/components/MapCanvas';
@@ -22,6 +22,7 @@ const MAP_H = 800;
 const Index = () => {
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 100000));
   const [themeId, setThemeId] = useState('green');
+  const [terrainId, setTerrainId] = useState('mountain');
   const [activeTool, setActiveTool] = useState<'select' | 'circle' | 'square' | 'triangle' | 'diamond'>('select');
   const [customMarkers, setCustomMarkers] = useState<MapMarker[]>([]);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
@@ -29,9 +30,10 @@ const Index = () => {
   const svgRef = useRef<SVGSVGElement>(null);
 
   const theme = MAP_THEMES.find((t) => t.id === themeId) || MAP_THEMES[0];
+  const terrain = TERRAIN_PRESETS.find((t) => t.id === terrainId) || TERRAIN_PRESETS[0];
   const mapNumber = useMemo(() => (seed % 99) + 1, [seed]);
 
-  const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, 10, 0.005), [seed]);
+  const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain), [seed, terrain]);
   const dots = useMemo(() => generateScatterDots(MAP_W, MAP_H, seed, 50), [seed]);
   const generatedMarkers = useMemo(() => generateMarkers(MAP_W, MAP_H, seed, 15), [seed]);
 
@@ -94,6 +96,23 @@ const Index = () => {
           <span className="text-sm font-bold tracking-[0.2em] uppercase">Outland Map</span>
         </div>
         <div className="flex items-center gap-3">
+          {/* Terrain type selector */}
+          <Select value={terrainId} onValueChange={setTerrainId}>
+            <SelectTrigger className="w-44 h-8 text-xs font-mono">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {TERRAIN_PRESETS.map((t) => (
+                <SelectItem key={t.id} value={t.id}>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium">{t.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Theme selector */}
           <Select value={themeId} onValueChange={setThemeId}>
             <SelectTrigger className="w-36 h-8 text-xs font-mono">
               <SelectValue />
