@@ -5,10 +5,10 @@ export interface TerrainPreset {
   id: string;
   name: string;
   description: string;
+  /** Default contour levels */
   levels: number;
   scale: number;
   octaves: { freq: number; amp: number }[];
-  /** Shape function applied to the raw noise to sculpt terrain */
   shape: (x: number, y: number, w: number, h: number) => number;
 }
 
@@ -17,8 +17,8 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
     id: 'mountain',
     name: 'Mountain Range',
     description: 'Peaks and ridges',
-    levels: 18,
-    scale: 0.004,
+    levels: 20,
+    scale: 0.003,
     octaves: [
       { freq: 1, amp: 0.55 },
       { freq: 2, amp: 0.25 },
@@ -26,19 +26,17 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
       { freq: 8, amp: 0.08 },
     ],
     shape: (x, y, w, h) => {
-      // Central peak with falloff
-      const cx = (x - w / 2) / (w / 2);
-      const cy = (y - h / 2) / (h / 2);
-      const dist = Math.sqrt(cx * cx + cy * cy);
-      return Math.max(0, 1 - dist * 0.9);
+      const cx = (x - w * 0.45) / (w * 0.45);
+      const cy = (y - h * 0.5) / (h * 0.45);
+      return Math.max(0, 1 - Math.sqrt(cx * cx + cy * cy) * 0.85);
     },
   },
   {
     id: 'island',
     name: 'Island Archipelago',
     description: 'Islands surrounded by water',
-    levels: 16,
-    scale: 0.005,
+    levels: 18,
+    scale: 0.004,
     octaves: [
       { freq: 1, amp: 0.5 },
       { freq: 2, amp: 0.3 },
@@ -49,16 +47,15 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
       const cx = (x - w / 2) / (w / 2);
       const cy = (y - h / 2) / (h / 2);
       const dist = Math.sqrt(cx * cx + cy * cy);
-      // Strong circular falloff — creates island shapes
-      return Math.max(0, 1 - dist * 1.4) ** 1.5;
+      return Math.max(0, 1 - dist * 1.3) ** 1.5;
     },
   },
   {
     id: 'valley',
     name: 'River Valley',
     description: 'Deep valleys and rivers',
-    levels: 20,
-    scale: 0.003,
+    levels: 22,
+    scale: 0.0025,
     octaves: [
       { freq: 1, amp: 0.4 },
       { freq: 2, amp: 0.3 },
@@ -66,7 +63,6 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
       { freq: 8, amp: 0.1 },
     ],
     shape: (x, y, w, h) => {
-      // Ridge along diagonal
       const nx = x / w;
       const ny = y / h;
       const ridge = Math.sin(nx * Math.PI * 2 + ny * Math.PI) * 0.5 + 0.5;
@@ -78,8 +74,8 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
     id: 'plateau',
     name: 'Plateau Mesa',
     description: 'Flat-topped elevations',
-    levels: 14,
-    scale: 0.006,
+    levels: 16,
+    scale: 0.005,
     octaves: [
       { freq: 1, amp: 0.6 },
       { freq: 2, amp: 0.2 },
@@ -90,17 +86,15 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
       const cx = (x - w * 0.4) / (w * 0.4);
       const cy = (y - h * 0.45) / (h * 0.4);
       const d = Math.max(Math.abs(cx), Math.abs(cy));
-      // Flat top plateau
-      const plateau = d < 0.5 ? 1 : Math.max(0, 1 - (d - 0.5) * 2);
-      return plateau;
+      return d < 0.5 ? 1 : Math.max(0, 1 - (d - 0.5) * 2);
     },
   },
   {
     id: 'coastal',
     name: 'Coastal Terrain',
     description: 'Shoreline with elevation',
-    levels: 16,
-    scale: 0.004,
+    levels: 18,
+    scale: 0.003,
     octaves: [
       { freq: 1, amp: 0.5 },
       { freq: 2, amp: 0.25 },
@@ -108,9 +102,8 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
       { freq: 8, amp: 0.1 },
     ],
     shape: (x, y, w, h) => {
-      // Gradient from left (water) to right (land)
       const nx = x / w;
-      const gradient = Math.max(0, (nx - 0.25) * 1.6);
+      const gradient = Math.max(0, (nx - 0.2) * 1.5);
       const edge = Math.min(y / h, 1 - y / h) * 4;
       return gradient * Math.min(1, edge);
     },
@@ -119,8 +112,8 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
     id: 'caldera',
     name: 'Volcanic Caldera',
     description: 'Ring-shaped crater',
-    levels: 20,
-    scale: 0.005,
+    levels: 22,
+    scale: 0.004,
     octaves: [
       { freq: 1, amp: 0.45 },
       { freq: 2, amp: 0.3 },
@@ -131,7 +124,6 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
       const cx = (x - w / 2) / (w / 2);
       const cy = (y - h / 2) / (h / 2);
       const dist = Math.sqrt(cx * cx + cy * cy);
-      // Ring shape — high at radius ~0.4, drops off at center and edges
       const ring = Math.exp(-((dist - 0.45) ** 2) / 0.04);
       const falloff = Math.max(0, 1 - dist * 1.1);
       return ring * 0.7 + falloff * 0.3;
@@ -139,26 +131,43 @@ export const TERRAIN_PRESETS: TerrainPreset[] = [
   },
 ];
 
+/* ── Contour params (controlled by sliders) ── */
+export interface ContourParams {
+  levels: number;       // number of contour lines (5-40)
+  smoothing: number;    // smoothing factor (0-1)
+  detail: number;       // grid resolution in px (1=max detail, 8=low)
+  lineWidth: number;    // stroke width (0.3-3)
+}
+
+export const DEFAULT_CONTOUR_PARAMS: ContourParams = {
+  levels: 20,
+  smoothing: 0.8,
+  detail: 2,
+  lineWidth: 1,
+};
+
 /* ── Contour generation ── */
 
 export function generateContourLines(
   width: number,
   height: number,
   seed: number,
-  preset: TerrainPreset
+  preset: TerrainPreset,
+  params: ContourParams = DEFAULT_CONTOUR_PARAMS
 ): string[] {
-  const { levels, scale, octaves, shape } = preset;
+  const { scale, octaves, shape } = preset;
+  const { levels, detail } = params;
 
   const noise2D = createNoise2D(() => {
     seed = (seed * 16807) % 2147483647;
     return (seed - 1) / 2147483646;
   });
 
-  const resolution = 3; // finer grid for smoother contours
+  const resolution = Math.max(1, Math.round(detail));
   const cols = Math.floor(width / resolution) + 1;
   const rows = Math.floor(height / resolution) + 1;
 
-  // Build noise field shaped by preset
+  // Build height field
   const field: number[][] = [];
   for (let y = 0; y < rows; y++) {
     field[y] = [];
@@ -173,7 +182,6 @@ export function generateContourLines(
         noise += noise2D(nx * oct.freq, ny * oct.freq) * oct.amp;
       }
 
-      // Apply terrain shape mask
       const mask = shape(wx, wy, width, height);
       field[y][x] = noise * 0.5 + mask * 0.6;
     }
@@ -181,21 +189,28 @@ export function generateContourLines(
 
   const paths: string[] = [];
 
-  // Extract contour lines via marching squares
   for (let level = 0; level < levels; level++) {
-    const threshold = -0.2 + (1.0 * level) / levels;
+    const threshold = -0.15 + (0.95 * level) / levels;
     const segments = marchingSquares(field, cols, rows, resolution, threshold);
-    const chains = chainSegments(segments, resolution);
+    const chains = chainSegments(segments, resolution * 1.2);
 
     for (const chain of chains) {
-      if (chain.length < 5) continue;
-      const smoothed = smoothCubicPath(chain);
-      if (smoothed) paths.push(smoothed);
+      if (chain.length < 4) continue;
+      // Apply Gaussian-like smoothing passes based on smoothing param
+      let smoothed = chain;
+      const passes = Math.round(params.smoothing * 5);
+      for (let p = 0; p < passes; p++) {
+        smoothed = smoothChain(smoothed);
+      }
+      const path = buildCubicBezierPath(smoothed);
+      if (path) paths.push(path);
     }
   }
 
   return paths;
 }
+
+/* ── Marching squares ── */
 
 function marchingSquares(
   field: number[][],
@@ -259,11 +274,13 @@ function marchingSquares(
   return segments;
 }
 
-function chainSegments(segments: [number, number][][], res: number): [number, number][][] {
+/* ── Chain segments into continuous polylines ── */
+
+function chainSegments(segments: [number, number][][], tolerance: number): [number, number][][] {
   const chains: [number, number][][] = [];
   const used = new Set<number>();
-  const tolerance = res * 1.5;
 
+  // Index endpoints for faster lookup
   for (let i = 0; i < segments.length; i++) {
     if (used.has(i)) continue;
     used.add(i);
@@ -279,21 +296,13 @@ function chainSegments(segments: [number, number][][], res: number): [number, nu
         const first = chain[0];
 
         if (ptDist(last, seg[0]) < tolerance) {
-          chain.push(seg[1]);
-          used.add(j);
-          changed = true;
+          chain.push(seg[1]); used.add(j); changed = true;
         } else if (ptDist(last, seg[1]) < tolerance) {
-          chain.push(seg[0]);
-          used.add(j);
-          changed = true;
+          chain.push(seg[0]); used.add(j); changed = true;
         } else if (ptDist(first, seg[1]) < tolerance) {
-          chain.unshift(seg[0]);
-          used.add(j);
-          changed = true;
+          chain.unshift(seg[0]); used.add(j); changed = true;
         } else if (ptDist(first, seg[0]) < tolerance) {
-          chain.unshift(seg[1]);
-          used.add(j);
-          changed = true;
+          chain.unshift(seg[1]); used.add(j); changed = true;
         }
       }
     }
@@ -304,40 +313,78 @@ function chainSegments(segments: [number, number][][], res: number): [number, nu
   return chains;
 }
 
-function ptDist(a: [number, number], b: [number, number]): number {
-  return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2);
+/* ── Smoothing ── */
+
+function smoothChain(points: [number, number][]): [number, number][] {
+  if (points.length < 3) return points;
+  const isClosed = ptDist(points[0], points[points.length - 1]) < 10;
+  const result: [number, number][] = [];
+
+  for (let i = 0; i < points.length; i++) {
+    if (!isClosed && (i === 0 || i === points.length - 1)) {
+      result.push(points[i]);
+      continue;
+    }
+    const prev = points[(i - 1 + points.length) % points.length];
+    const curr = points[i];
+    const next = points[(i + 1) % points.length];
+    result.push([
+      curr[0] * 0.5 + (prev[0] + next[0]) * 0.25,
+      curr[1] * 0.5 + (prev[1] + next[1]) * 0.25,
+    ]);
+  }
+
+  return result;
 }
 
-function smoothCubicPath(points: [number, number][]): string {
+/* ── Build smooth cubic bezier SVG path from points ── */
+
+function buildCubicBezierPath(points: [number, number][]): string {
   if (points.length < 2) return '';
 
-  // Check if closed contour
   const isClosed = ptDist(points[0], points[points.length - 1]) < 10;
 
   if (points.length === 2) {
-    return `M ${points[0][0].toFixed(1)} ${points[0][1].toFixed(1)} L ${points[1][0].toFixed(1)} ${points[1][1].toFixed(1)}`;
+    return `M${f(points[0][0])},${f(points[0][1])} L${f(points[1][0])},${f(points[1][1])}`;
   }
 
-  let d = `M ${points[0][0].toFixed(1)} ${points[0][1].toFixed(1)}`;
+  // Use Catmull-Rom to Cubic Bezier conversion for perfectly smooth curves
+  let d = `M${f(points[0][0])},${f(points[0][1])}`;
 
   for (let i = 0; i < points.length - 1; i++) {
     const p0 = points[i === 0 ? (isClosed ? points.length - 2 : 0) : i - 1];
     const p1 = points[i];
     const p2 = points[i + 1];
-    const p3idx = i + 2 < points.length ? i + 2 : (isClosed ? (i + 2) % points.length : points.length - 1);
-    const p3 = points[p3idx];
+    const p3 = points[Math.min(i + 2, points.length - 1)];
 
-    const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
-    const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
-    const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
-    const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
-
-    d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+    if (isClosed) {
+      const p3i = (i + 2) % points.length;
+      const p3c = points[p3i];
+      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const cp2x = p2[0] - (p3c[0] - p1[0]) / 6;
+      const cp2y = p2[1] - (p3c[1] - p1[1]) / 6;
+      d += ` C${f(cp1x)},${f(cp1y)} ${f(cp2x)},${f(cp2y)} ${f(p2[0])},${f(p2[1])}`;
+    } else {
+      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+      const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+      d += ` C${f(cp1x)},${f(cp1y)} ${f(cp2x)},${f(cp2y)} ${f(p2[0])},${f(p2[1])}`;
+    }
   }
 
-  if (isClosed) d += ' Z';
+  if (isClosed) d += 'Z';
 
   return d;
+}
+
+function f(n: number): string {
+  return n.toFixed(1);
+}
+
+function ptDist(a: [number, number], b: [number, number]): number {
+  return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2);
 }
 
 /* ── Scatter dots ── */
