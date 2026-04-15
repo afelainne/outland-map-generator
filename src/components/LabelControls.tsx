@@ -106,6 +106,16 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
 
 
       <div className="flex items-center justify-between">
+        <span className="text-[10px] font-mono text-foreground/70">Legend</span>
+        <Switch checked={params.showLegend} onCheckedChange={(v) => update('showLegend', v)} className="scale-75" />
+      </div>
+
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] font-mono text-foreground/70">Logo & Title</span>
+        <Switch checked={params.showBranding} onCheckedChange={(v) => update('showBranding', v)} className="scale-75" />
+      </div>
+
+      <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-foreground/70">Show Shapes</span>
         <Switch checked={params.showShapes} onCheckedChange={(v) => update('showShapes', v)} className="scale-75" />
       </div>
