@@ -27,6 +27,7 @@ interface MapCanvasProps {
   svgRef: React.RefObject<SVGSVGElement | null>;
   seed: number;
   lineWidth?: number;
+  contourOpacity?: number;
   labelMode?: 'number' | 'abbrev' | 'full';
   labelStyle?: LabelStyleParams;
 }
@@ -46,6 +47,7 @@ const MapCanvas = ({
   svgRef,
   seed,
   lineWidth = 1,
+  contourOpacity = 0.75,
   labelMode = 'number',
   labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1 },
 }: MapCanvasProps) => {
