@@ -157,7 +157,7 @@ const MapCanvas = ({
             fill="none"
             stroke={theme.line}
             strokeWidth={lineWidth}
-            opacity={labelStyle.contourOpacity ?? 0.75}
+            opacity={contourOpacity}
             strokeLinecap="round"
             strokeLinejoin="round"
           />
