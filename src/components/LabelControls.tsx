@@ -21,6 +21,7 @@ export interface LabelStyleParams {
   lineElementSize: number;
   showLegend: boolean;
   showBranding: boolean;
+  gridOpacity: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -40,6 +41,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   lineElementSize: 1,
   showLegend: true,
   showBranding: true,
+  gridOpacity: 0.5,
 };
 
 interface LabelControlsProps {
