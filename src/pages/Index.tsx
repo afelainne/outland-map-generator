@@ -1,12 +1,13 @@
 import { useState, useRef, useMemo, useCallback } from 'react';
-import { generateContourLines, generateScatterDots, generateMarkers, LOCATION_NAMES, TERRAIN_PRESETS } from '@/lib/noise';
-import type { MapMarker } from '@/lib/noise';
+import { generateContourLines, generateScatterDots, generateMarkers, LOCATION_NAMES, TERRAIN_PRESETS, DEFAULT_CONTOUR_PARAMS } from '@/lib/noise';
+import type { MapMarker, ContourParams } from '@/lib/noise';
 import { MAP_THEMES } from '@/lib/themes';
 import MapCanvas from '@/components/MapCanvas';
 import MapToolbar from '@/components/MapToolbar';
 import MarkerPanel from '@/components/MarkerPanel';
 import ExportBar from '@/components/ExportBar';
 import OutlandLogo from '@/components/OutlandLogo';
+import ContourControls from '@/components/ContourControls';
 import { useMapExport } from '@/hooks/useMapExport';
 import {
   Select,
@@ -27,13 +28,14 @@ const Index = () => {
   const [customMarkers, setCustomMarkers] = useState<MapMarker[]>([]);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
+  const [contourParams, setContourParams] = useState<ContourParams>(DEFAULT_CONTOUR_PARAMS);
   const svgRef = useRef<SVGSVGElement>(null);
 
   const theme = MAP_THEMES.find((t) => t.id === themeId) || MAP_THEMES[0];
   const terrain = TERRAIN_PRESETS.find((t) => t.id === terrainId) || TERRAIN_PRESETS[0];
   const mapNumber = useMemo(() => (seed % 99) + 1, [seed]);
 
-  const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain), [seed, terrain]);
+  const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain, contourParams), [seed, terrain, contourParams]);
   const dots = useMemo(() => generateScatterDots(MAP_W, MAP_H, seed, 50), [seed]);
   const generatedMarkers = useMemo(() => generateMarkers(MAP_W, MAP_H, seed, 15), [seed]);
 
@@ -155,8 +157,12 @@ const Index = () => {
             mapNumber={mapNumber}
             svgRef={svgRef}
             seed={seed}
+            lineWidth={contourParams.lineWidth}
           />
         </div>
+
+        {/* Contour controls */}
+        <ContourControls params={contourParams} onChange={setContourParams} />
 
         {/* Marker panel */}
         <MarkerPanel
