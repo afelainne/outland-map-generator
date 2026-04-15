@@ -51,7 +51,7 @@ const MapCanvas = ({
   lineWidth = 1,
   contourOpacity = 0.75,
   labelMode = 'number',
-  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, nameIconShape: null, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1 },
+  labelStyle = { ...{ uppercase: false, scale: 1, markerType: 'dot' as const, nameIconShape: null, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1, nameIconOpacity: 0.9, nameTextOpacity: 0.9, boardNumberOpacity: 0.12, logoOpacity: 0.85, legendOpacity: 0.8, shapeOpacity: 1 } },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -304,9 +304,10 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
           const logoScale = (dotR * 2) / 110;
 
           const renderDotMarker = () => {
+            const iconOp = labelStyle.nameIconOpacity ?? 0.9;
             if (mType === 'logo') {
               return (
-                <g transform={`translate(${dot.x - dotR}, ${dot.y - dotR}) scale(${logoScale})`} opacity="0.9">
+                <g transform={`translate(${dot.x - dotR}, ${dot.y - dotR}) scale(${logoScale})`} opacity={iconOp}>
                   <path d="M13.4186 62.3094H6.49537V55.3861H13.4186V62.3094Z" fill={theme.dot} />
                   <path d="M27.2652 62.3094H20.3419V55.3861H27.2652V62.3094Z" fill={theme.dot} />
                   <path d="M41.1117 62.3094H34.1884V55.3861H41.1117V62.3094Z" fill={theme.dot} />
@@ -322,17 +323,17 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
               const sw = 1.2;
               switch (shapeType) {
                 case 'circle':
-                  return <circle cx={dot.x} cy={dot.y} r={shapeSize} fill="none" stroke={theme.dot} strokeWidth={sw} />;
+                  return <circle cx={dot.x} cy={dot.y} r={shapeSize} fill="none" stroke={theme.dot} strokeWidth={sw} opacity={iconOp} />;
                 case 'square':
-                  return <rect x={dot.x - shapeSize} y={dot.y - shapeSize} width={shapeSize * 2} height={shapeSize * 2} fill="none" stroke={theme.dot} strokeWidth={sw} />;
+                  return <rect x={dot.x - shapeSize} y={dot.y - shapeSize} width={shapeSize * 2} height={shapeSize * 2} fill="none" stroke={theme.dot} strokeWidth={sw} opacity={iconOp} />;
                 case 'triangle':
-                  return <polygon points={`${dot.x},${dot.y - shapeSize} ${dot.x - shapeSize},${dot.y + shapeSize} ${dot.x + shapeSize},${dot.y + shapeSize}`} fill="none" stroke={theme.dot} strokeWidth={sw} />;
+                  return <polygon points={`${dot.x},${dot.y - shapeSize} ${dot.x - shapeSize},${dot.y + shapeSize} ${dot.x + shapeSize},${dot.y + shapeSize}`} fill="none" stroke={theme.dot} strokeWidth={sw} opacity={iconOp} />;
                 case 'diamond':
-                  return <polygon points={`${dot.x},${dot.y - shapeSize} ${dot.x + shapeSize},${dot.y} ${dot.x},${dot.y + shapeSize} ${dot.x - shapeSize},${dot.y}`} fill="none" stroke={theme.dot} strokeWidth={sw} />;
+                  return <polygon points={`${dot.x},${dot.y - shapeSize} ${dot.x + shapeSize},${dot.y} ${dot.x},${dot.y + shapeSize} ${dot.x - shapeSize},${dot.y}`} fill="none" stroke={theme.dot} strokeWidth={sw} opacity={iconOp} />;
               }
             }
             // default: filled dot
-            return <circle cx={dot.x} cy={dot.y} r={dotR} fill={theme.dot} opacity="0.9" />;
+            return <circle cx={dot.x} cy={dot.y} r={dotR} fill={theme.dot} opacity={iconOp} />;
           };
 
           return (
@@ -343,7 +344,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
                 y={dot.y + fontSize * 0.35}
                 fill={theme.text}
                 fontSize={fontSize}
-                opacity="0.9"
+                opacity={labelStyle.nameTextOpacity ?? 0.9}
                 style={{ fontFamily: "'IBM Plex Mono', monospace" }}
               >
                 {labelText}
@@ -355,7 +356,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         {/* Outland Logo & Title */}
         {labelStyle.showBranding && (
           <>
-            <g transform={`translate(20, ${height - blockH - 20}) scale(${blockW / 110})`} opacity="0.85">
+            <g transform={`translate(20, ${height - blockH - 20}) scale(${blockW / 110})`} opacity={labelStyle.logoOpacity ?? 0.85}>
               <path d="M13.4186 62.3094H6.49537V55.3861H13.4186V62.3094Z" fill={theme.text} />
               <path d="M27.2652 62.3094H20.3419V55.3861H27.2652V62.3094Z" fill={theme.text} />
               <path d="M41.1117 62.3094H34.1884V55.3861H41.1117V62.3094Z" fill={theme.text} />
@@ -371,7 +372,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
               fill={theme.text}
               fontSize="9"
               letterSpacing="3"
-              opacity="0.8"
+              opacity={labelStyle.logoOpacity ?? 0.8}
               style={{ fontFamily: "'IBM Plex Mono', monospace" }}
             >
               OUTLAND MAP
@@ -387,7 +388,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
           fill={theme.text}
           fontSize="72"
           fontWeight="bold"
-          opacity="0.12"
+          opacity={labelStyle.boardNumberOpacity ?? 0.12}
           style={{ fontFamily: "'IBM Plex Mono', monospace" }}
         >
           {String(mapNumber).padStart(2, '0')}
@@ -397,6 +398,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         {labelStyle.showShapes && markers.map((m) => (
           <g
             key={m.id}
+            opacity={labelStyle.shapeOpacity ?? 1}
             onClick={(e) => {
               e.stopPropagation();
               onSelectMarker(m.id);
@@ -490,7 +492,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
                 };
 
                 return (
-                  <g key={`legend-${i}`} opacity="0.8">
+                  <g key={`legend-${i}`} opacity={labelStyle.legendOpacity ?? 0.8}>
                     {renderIcon()}
                     <text
                       x={textX}
