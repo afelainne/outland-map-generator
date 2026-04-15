@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, showLegend: true, showBranding: true },
+  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -158,9 +158,8 @@ const MapCanvas = ({
           />
         ))}
 
-        {/* Direction arrows on contour lines */}
+        {/* Direction marks on contour lines */}
         {labelStyle.showArrows && contourPaths.map((d, i) => {
-          // Parse path points from the d attribute to place arrows
           const points: { x: number; y: number }[] = [];
           const regex = /[ML]\s*([\d.e+-]+)[,\s]+([\d.e+-]+)|C\s*([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)/g;
           let match;
@@ -168,34 +167,115 @@ const MapCanvas = ({
             if (match[1] !== undefined) {
               points.push({ x: parseFloat(match[1]), y: parseFloat(match[2]) });
             } else if (match[7] !== undefined) {
-              // Take the endpoint of cubic bezier
               points.push({ x: parseFloat(match[7]), y: parseFloat(match[8]) });
             }
           }
           if (points.length < 3) return null;
-          const arrowSpacing = labelStyle.arrowSpacing;
-          const as = labelStyle.arrowSize;
+          const spacing = labelStyle.arrowSpacing;
+          const sz = labelStyle.arrowSize;
+          const shape = labelStyle.arrowShape;
           const arrows: JSX.Element[] = [];
           let dist = 0;
-          let nextArrowAt = arrowSpacing * 0.5;
+          let nextAt = spacing * 0.5;
           for (let j = 1; j < points.length; j++) {
             const dx = points[j].x - points[j - 1].x;
             const dy = points[j].y - points[j - 1].y;
             const segLen = Math.sqrt(dx * dx + dy * dy);
             dist += segLen;
-            if (dist >= nextArrowAt && segLen > 0.5) {
+            if (dist >= nextAt && segLen > 0.5) {
               const angle = Math.atan2(dy, dx) * (180 / Math.PI);
               const mx = (points[j].x + points[j - 1].x) / 2;
               const my = (points[j].y + points[j - 1].y) / 2;
+              const r = 2.5 * sz;
+              let el: JSX.Element;
+              switch (shape) {
+                case 'chevron':
+                  el = <path d={`M${-3 * sz},${-2.5 * sz} L${1 * sz},0 L${-3 * sz},${2.5 * sz}`} fill="none" stroke={theme.line} strokeWidth={0.8 * sz} />;
+                  break;
+                case 'arrow':
+                  el = <><line x1={-3 * sz} y1={0} x2={2 * sz} y2={0} stroke={theme.line} strokeWidth={0.8 * sz} /><path d={`M${0},${-2 * sz} L${3 * sz},0 L${0},${2 * sz}`} fill="none" stroke={theme.line} strokeWidth={0.8 * sz} /></>;
+                  break;
+                case 'triangle':
+                  el = <polygon points={`${-r},${r * 0.8} ${r},0 ${-r},${-r * 0.8}`} fill={theme.line} opacity="0.6" />;
+                  break;
+                case 'circle':
+                  el = <circle cx={0} cy={0} r={r} fill="none" stroke={theme.line} strokeWidth={0.7 * sz} />;
+                  break;
+                case 'square':
+                  el = <rect x={-r} y={-r} width={r * 2} height={r * 2} fill="none" stroke={theme.line} strokeWidth={0.7 * sz} />;
+                  break;
+                case 'diamond':
+                  el = <polygon points={`0,${-r} ${r},0 0,${r} ${-r},0`} fill="none" stroke={theme.line} strokeWidth={0.7 * sz} />;
+                  break;
+                case 'dot':
+                  el = <circle cx={0} cy={0} r={r * 0.6} fill={theme.line} />;
+                  break;
+                case 'tick':
+                  el = <line x1={0} y1={-r} x2={0} y2={r} stroke={theme.line} strokeWidth={0.8 * sz} />;
+                  break;
+                case 'cross':
+                  el = <><line x1={-r} y1={0} x2={r} y2={0} stroke={theme.line} strokeWidth={0.7 * sz} /><line x1={0} y1={-r} x2={0} y2={r} stroke={theme.line} strokeWidth={0.7 * sz} /></>;
+                  break;
+                default:
+                  el = <path d={`M${-3 * sz},${-2.5 * sz} L${1 * sz},0 L${-3 * sz},${2.5 * sz}`} fill="none" stroke={theme.line} strokeWidth={0.8 * sz} />;
+              }
               arrows.push(
-                <g key={`${i}-${j}`} transform={`translate(${mx}, ${my}) rotate(${angle}) scale(${as})`}>
-                  <path d="M-3,-2.5 L1,0 L-3,2.5" fill="none" stroke={theme.line} strokeWidth="0.8" opacity="0.6" />
+                <g key={`${i}-${j}`} transform={`translate(${mx}, ${my}) rotate(${angle})`} opacity="0.6">
+                  {el}
                 </g>
               );
-              nextArrowAt = dist + arrowSpacing;
+              nextAt = dist + spacing;
             }
           }
           return <g key={`arrows-${i}`}>{arrows}</g>;
+        })}
+
+        {/* Line elements - perpendicular ticks emanating from contour lines */}
+        {labelStyle.showLineElements && contourPaths.map((d, i) => {
+          const points: { x: number; y: number }[] = [];
+          const regex = /[ML]\s*([\d.e+-]+)[,\s]+([\d.e+-]+)|C\s*([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)[,\s]+([\d.e+-]+)/g;
+          let match;
+          while ((match = regex.exec(d)) !== null) {
+            if (match[1] !== undefined) {
+              points.push({ x: parseFloat(match[1]), y: parseFloat(match[2]) });
+            } else if (match[7] !== undefined) {
+              points.push({ x: parseFloat(match[7]), y: parseFloat(match[8]) });
+            }
+          }
+          if (points.length < 3) return null;
+          const spacing = labelStyle.lineElementSpacing;
+          const sz = labelStyle.lineElementSize;
+          const tickLen = 4 * sz;
+          const ticks: JSX.Element[] = [];
+          let dist = 0;
+          let nextAt = spacing * 0.3;
+          for (let j = 1; j < points.length; j++) {
+            const dx = points[j].x - points[j - 1].x;
+            const dy = points[j].y - points[j - 1].y;
+            const segLen = Math.sqrt(dx * dx + dy * dy);
+            dist += segLen;
+            if (dist >= nextAt && segLen > 0.5) {
+              const mx = (points[j].x + points[j - 1].x) / 2;
+              const my = (points[j].y + points[j - 1].y) / 2;
+              // Perpendicular direction (rotated 90°)
+              const nx = -dy / segLen;
+              const ny = dx / segLen;
+              ticks.push(
+                <line
+                  key={`${i}-${j}`}
+                  x1={mx}
+                  y1={my}
+                  x2={mx + nx * tickLen}
+                  y2={my + ny * tickLen}
+                  stroke={theme.line}
+                  strokeWidth={0.5 * sz}
+                  opacity="0.4"
+                />
+              );
+              nextAt = dist + spacing;
+            }
+          }
+          return <g key={`elems-${i}`}>{ticks}</g>;
         })}
 
         {/* Location name labels with dot containers */}
