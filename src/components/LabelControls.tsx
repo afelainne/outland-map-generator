@@ -15,6 +15,7 @@ export interface LabelStyleParams {
   markerType: MarkerType;
   markerSize: number;
   shapeScale: number;
+  legendScale: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -28,6 +29,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   markerType: 'dot',
   markerSize: 1,
   shapeScale: 1,
+  legendScale: 0.7,
 };
 
 interface LabelControlsProps {
