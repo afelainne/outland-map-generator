@@ -162,7 +162,12 @@ const Index = () => {
         <div className="absolute top-4 left-4 z-10 flex gap-3">
           <MapToolbar
             activeTool={activeTool}
-            onToolChange={setActiveTool}
+            onToolChange={(tool) => {
+              setActiveTool(tool);
+              if (tool !== 'select') {
+                setGlobalShape(tool as 'circle' | 'square' | 'triangle' | 'diamond');
+              }
+            }}
             onRegenerate={handleRegenerate}
             onRandomizeAll={handleRandomizeAll}
             labelMode={labelMode}
