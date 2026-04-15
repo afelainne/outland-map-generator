@@ -344,7 +344,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
                 y={dot.y + fontSize * 0.35}
                 fill={theme.text}
                 fontSize={fontSize}
-                opacity="0.9"
+                opacity={labelStyle.nameTextOpacity ?? 0.9}
                 style={{ fontFamily: "'IBM Plex Mono', monospace" }}
               >
                 {labelText}
@@ -356,7 +356,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         {/* Outland Logo & Title */}
         {labelStyle.showBranding && (
           <>
-            <g transform={`translate(20, ${height - blockH - 20}) scale(${blockW / 110})`} opacity="0.85">
+            <g transform={`translate(20, ${height - blockH - 20}) scale(${blockW / 110})`} opacity={labelStyle.logoOpacity ?? 0.85}>
               <path d="M13.4186 62.3094H6.49537V55.3861H13.4186V62.3094Z" fill={theme.text} />
               <path d="M27.2652 62.3094H20.3419V55.3861H27.2652V62.3094Z" fill={theme.text} />
               <path d="M41.1117 62.3094H34.1884V55.3861H41.1117V62.3094Z" fill={theme.text} />
@@ -372,7 +372,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
               fill={theme.text}
               fontSize="9"
               letterSpacing="3"
-              opacity="0.8"
+              opacity={labelStyle.logoOpacity ?? 0.8}
               style={{ fontFamily: "'IBM Plex Mono', monospace" }}
             >
               OUTLAND MAP
@@ -388,7 +388,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
           fill={theme.text}
           fontSize="72"
           fontWeight="bold"
-          opacity="0.12"
+          opacity={labelStyle.boardNumberOpacity ?? 0.12}
           style={{ fontFamily: "'IBM Plex Mono', monospace" }}
         >
           {String(mapNumber).padStart(2, '0')}
@@ -398,6 +398,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         {labelStyle.showShapes && markers.map((m) => (
           <g
             key={m.id}
+            opacity={labelStyle.shapeOpacity ?? 1}
             onClick={(e) => {
               e.stopPropagation();
               onSelectMarker(m.id);
@@ -491,7 +492,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
                 };
 
                 return (
-                  <g key={`legend-${i}`} opacity="0.8">
+                  <g key={`legend-${i}`} opacity={labelStyle.legendOpacity ?? 0.8}>
                     {renderIcon()}
                     <text
                       x={textX}
