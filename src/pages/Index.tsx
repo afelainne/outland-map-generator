@@ -49,8 +49,12 @@ const Index = () => {
   // Apply global shape override to all markers
   const allMarkers = useMemo(() => {
     const combined = [...generatedMarkers, ...customMarkers];
-    return combined.map(m => ({ ...m, shape: globalShape }));
-  }, [generatedMarkers, customMarkers, globalShape]);
+    return combined.map(m => ({
+      ...m,
+      shape: globalShape,
+      name: renamedMarkers[m.id] ?? m.name,
+    }));
+  }, [generatedMarkers, customMarkers, globalShape, renamedMarkers]);
 
   const { exportSVG, exportRaster } = useMapExport(svgRef);
 
@@ -95,6 +99,7 @@ const Index = () => {
   }, []);
 
   const handleRenameMarker = useCallback((id: string, name: string) => {
+    setRenamedMarkers(prev => ({ ...prev, [id]: name }));
     setCustomMarkers((prev) => prev.map((m) => (m.id === id ? { ...m, name } : m)));
   }, []);
 
