@@ -132,6 +132,20 @@ const MapCanvas = ({
             <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
             <feBlend in="SourceGraphic" in2="gray" mode="multiply" />
           </filter>
+          {/* Arrow marker for contour direction */}
+          {labelStyle.showArrows && (
+            <marker
+              id={`arrow-${seed}`}
+              viewBox="0 0 6 6"
+              refX="3"
+              refY="3"
+              markerWidth="4"
+              markerHeight="4"
+              orient="auto"
+            >
+              <path d="M0,1 L3,3 L0,5" fill="none" stroke={theme.line} strokeWidth="1" />
+            </marker>
+          )}
         </defs>
 
         {/* Background */}
@@ -145,7 +159,17 @@ const MapCanvas = ({
 
         {/* Contour lines - smooth flowing curves */}
         {contourPaths.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke={theme.line} strokeWidth={lineWidth} opacity="0.75" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            key={i}
+            d={d}
+            fill="none"
+            stroke={theme.line}
+            strokeWidth={lineWidth}
+            opacity="0.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            markerMid={labelStyle.showArrows ? `url(#arrow-${seed})` : undefined}
+          />
         ))}
 
         {/* Location name labels with dot containers */}
