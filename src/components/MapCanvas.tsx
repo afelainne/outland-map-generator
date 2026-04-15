@@ -1,6 +1,7 @@
 import { useRef, useCallback, useMemo } from 'react';
 import type { MapTheme } from '@/lib/themes';
 import type { MapMarker, ScatterDot } from '@/lib/noise';
+import type { LabelStyleParams } from '@/components/LabelControls';
 
 /** Create abbreviation from name: "Department of Imagination" → "D.O.I." */
 function abbreviate(name: string): string {
@@ -27,6 +28,7 @@ interface MapCanvasProps {
   seed: number;
   lineWidth?: number;
   labelMode?: 'number' | 'abbrev' | 'full';
+  labelStyle?: LabelStyleParams;
 }
 
 const MapCanvas = ({
@@ -45,6 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
+  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
