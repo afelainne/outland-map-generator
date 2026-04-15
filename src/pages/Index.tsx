@@ -182,11 +182,17 @@ const Index = () => {
             seed={seed}
             lineWidth={contourParams.lineWidth}
             labelMode={labelMode}
+            labelStyle={labelStyle}
           />
         </div>
 
-        {/* Contour controls */}
-        <ContourControls params={contourParams} onChange={setContourParams} />
+        {/* Controls panel */}
+        <div className="absolute bottom-4 left-4 z-10 bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4">
+          <ContourControls params={contourParams} onChange={setContourParams} />
+          <div className="border-t border-border pt-3">
+            <LabelControls params={labelStyle} onChange={setLabelStyle} />
+          </div>
+        </div>
 
         {/* Marker panel */}
         <MarkerPanel
