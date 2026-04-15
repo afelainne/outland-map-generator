@@ -137,6 +137,9 @@ export interface ContourParams {
   smoothing: number;    // smoothing factor (0-1)
   detail: number;       // grid resolution in px (1=max detail, 8=low)
   lineWidth: number;    // stroke width (0.3-3)
+  noiseScale: number;   // multiplier for noise frequency (0.5-3)
+  contourOpacity: number; // opacity of contour lines (0-1)
+  octaves: number;      // number of noise octaves (1-6)
 }
 
 export const DEFAULT_CONTOUR_PARAMS: ContourParams = {
@@ -144,6 +147,9 @@ export const DEFAULT_CONTOUR_PARAMS: ContourParams = {
   smoothing: 0.8,
   detail: 2,
   lineWidth: 0.3,
+  noiseScale: 1,
+  contourOpacity: 0.75,
+  octaves: 4,
 };
 
 /* ── Contour generation ── */
@@ -155,8 +161,10 @@ export function generateContourLines(
   preset: TerrainPreset,
   params: ContourParams = DEFAULT_CONTOUR_PARAMS
 ): string[] {
-  const { scale, octaves, shape } = preset;
-  const { levels, detail } = params;
+  const { scale, octaves: presetOctaves, shape } = preset;
+  const { levels, detail, noiseScale = 1, octaves: octaveCount = 4 } = params;
+  const usedOctaves = presetOctaves.slice(0, Math.max(1, Math.min(octaveCount, presetOctaves.length)));
+  const scaleMult = scale * noiseScale;
 
   const noise2D = createNoise2D(() => {
     seed = (seed * 16807) % 2147483647;
@@ -174,11 +182,11 @@ export function generateContourLines(
     for (let x = 0; x < cols; x++) {
       const wx = x * resolution;
       const wy = y * resolution;
-      const nx = wx * scale;
-      const ny = wy * scale;
+      const nx = wx * scaleMult;
+      const ny = wy * scaleMult;
 
       let noise = 0;
-      for (const oct of octaves) {
+      for (const oct of usedOctaves) {
         noise += noise2D(nx * oct.freq, ny * oct.freq) * oct.amp;
       }
 
