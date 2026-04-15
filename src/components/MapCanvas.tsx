@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, showLegend: true, showBranding: true },
+  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, showLegend: true, showBranding: true },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -205,12 +205,6 @@ const MapCanvas = ({
           const s = labelStyle.scale;
           const fontSize = 7 * s;
           const charWidth = (labelStyle.uppercase ? 4.2 : 3.8) * s;
-          const textW = labelText.length * charWidth + 12 * s;
-          const textH = 14 * s;
-          const radius = labelStyle.rounded ? 3 * s : 0;
-          const bgFill = labelStyle.bgColor || theme.bg;
-          const strokeColor = labelStyle.outlineColor || theme.bg;
-          const isFullOpacity = labelStyle.opacity >= 1;
           const dotR = dot.r * s * labelStyle.markerSize;
           const mType = labelStyle.markerType;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
@@ -253,19 +247,6 @@ const MapCanvas = ({
           return (
             <g key={`dot-${i}`}>
               {renderDotMarker()}
-              <rect
-                x={dot.x + dotR + 2}
-                y={dot.y - textH / 2}
-                width={textW}
-                height={textH}
-                rx={radius}
-                ry={radius}
-                fill={bgFill}
-                opacity={isFullOpacity ? 1 : labelStyle.opacity}
-                stroke={labelStyle.outline ? strokeColor : 'none'}
-                strokeWidth={labelStyle.outline ? 0.7 : 0}
-                strokeOpacity={isFullOpacity ? 1 : 0.6}
-              />
               <text
                 x={dot.x + dotR + 4 * s + 2}
                 y={dot.y + fontSize * 0.35}
