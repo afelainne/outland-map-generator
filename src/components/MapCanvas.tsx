@@ -51,7 +51,7 @@ const MapCanvas = ({
   lineWidth = 1,
   contourOpacity = 0.75,
   labelMode = 'number',
-  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1 },
+  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, nameIconShape: null, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1 },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -299,7 +299,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
           const dotR = dot.r * s * labelStyle.markerSize;
           const mType = labelStyle.markerType;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
-          const shapeType = shapes[i % shapes.length];
+          const shapeType = labelStyle.nameIconShape || shapes[i % shapes.length];
           const shapeSize = dotR * 1.2;
           const logoScale = (dotR * 2) / 110;
 
@@ -454,7 +454,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
                 const iconX = legendX - legendW + legendPadding + 3 * ls;
                 const textX = iconX + 8 * ls;
                 const displayName = labelStyle.uppercase ? (dot.name || '').toUpperCase() : dot.name || '';
-                const shapeType = shapes[i % shapes.length];
+                const shapeType = labelStyle.nameIconShape || shapes[i % shapes.length];
                 const sz = 2.5 * ls;
                 const c = theme.dot;
 

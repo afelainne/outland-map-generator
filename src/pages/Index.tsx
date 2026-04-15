@@ -24,7 +24,6 @@ const Index = () => {
   const [themeId, setThemeId] = useState('monorail');
   const [terrainId, setTerrainId] = useState('mountain');
   const [activeTool, setActiveTool] = useState<'select' | 'circle' | 'square' | 'triangle' | 'diamond'>('select');
-  const [globalShape, setGlobalShape] = useState<'circle' | 'square' | 'triangle' | 'diamond'>('circle');
   const [customMarkers, setCustomMarkers] = useState<MapMarker[]>([]);
   const [renamedMarkers, setRenamedMarkers] = useState<Record<string, string>>({});
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
@@ -43,18 +42,16 @@ const Index = () => {
   const terrain = TERRAIN_PRESETS.find((t) => t.id === terrainId) || TERRAIN_PRESETS[0];
   const mapNumber = useMemo(() => (seed % 99) + 1, [seed]);
 
-  const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain, contourParams), [seed, terrain, contourParams]);
-  const dots = useMemo(() => generateScatterDots(MAP_W, MAP_H, seed, 50), [seed]);
-  const generatedMarkers = useMemo(() => generateMarkers(MAP_W, MAP_H, seed, 15), [seed]);
-  // Apply global shape override to all markers
+  const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain, contourParams), [MAP_W, MAP_H, seed, terrain, contourParams]);
+  const dots = useMemo(() => generateScatterDots(MAP_W, MAP_H, seed, 50), [MAP_W, MAP_H, seed]);
+  const generatedMarkers = useMemo(() => generateMarkers(MAP_W, MAP_H, seed, 15), [MAP_W, MAP_H, seed]);
   const allMarkers = useMemo(() => {
     const combined = [...generatedMarkers, ...customMarkers];
     return combined.map(m => ({
       ...m,
-      shape: globalShape,
       name: renamedMarkers[m.id] ?? m.name,
     }));
-  }, [generatedMarkers, customMarkers, globalShape, renamedMarkers]);
+  }, [generatedMarkers, customMarkers, renamedMarkers]);
 
   const { exportSVG, exportRaster } = useMapExport(svgRef);
 
@@ -171,7 +168,12 @@ const Index = () => {
             onToolChange={(tool) => {
               setActiveTool(tool);
               if (tool !== 'select') {
-                setGlobalShape(tool as 'circle' | 'square' | 'triangle' | 'diamond');
+                // Set nameIconShape and switch to shapes mode
+                setLabelStyle(prev => ({
+                  ...prev,
+                  markerType: 'shapes' as const,
+                  nameIconShape: tool as 'circle' | 'square' | 'triangle' | 'diamond',
+                }));
               }
             }}
             onRegenerate={handleRegenerate}

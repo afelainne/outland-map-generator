@@ -3,11 +3,13 @@ import { Switch } from '@/components/ui/switch';
 
 export type MarkerType = 'dot' | 'shapes' | 'logo';
 export type ArrowShape = 'chevron' | 'arrow' | 'triangle' | 'circle' | 'square' | 'diamond' | 'dot' | 'tick' | 'cross';
+export type NameIconShape = 'circle' | 'square' | 'triangle' | 'diamond' | null; // null = cycle
 
 export interface LabelStyleParams {
   uppercase: boolean;
   scale: number;
   markerType: MarkerType;
+  nameIconShape: NameIconShape;
   markerSize: number;
   shapeScale: number;
   legendScale: number;
@@ -29,6 +31,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   uppercase: false,
   scale: 1,
   markerType: 'dot',
+  nameIconShape: null,
   markerSize: 1,
   shapeScale: 1,
   legendScale: 0.7,
