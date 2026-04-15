@@ -147,7 +147,7 @@ const MapCanvas = ({
 
         {/* Location name labels with dot containers */}
         {dots.map((dot, i) => {
-          const labelText = dot.name;
+          const labelText = dot.name || '';
           const charWidth = 3.8;
           const textW = labelText.length * charWidth + 12;
           const textH = 14;
