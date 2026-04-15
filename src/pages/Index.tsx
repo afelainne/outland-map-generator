@@ -152,8 +152,8 @@ const Index = () => {
 
       {/* Main area */}
       <div className="flex-1 relative flex">
-        {/* Toolbar */}
-        <div className="absolute top-4 left-4 z-10">
+        {/* Toolbar + Controls side panel */}
+        <div className="absolute top-4 left-4 z-10 flex flex-col gap-3">
           <MapToolbar
             activeTool={activeTool}
             onToolChange={setActiveTool}
@@ -162,6 +162,12 @@ const Index = () => {
             labelMode={labelMode}
             onCycleLabelMode={() => setLabelMode((v) => v === 'number' ? 'abbrev' : v === 'abbrev' ? 'full' : 'number')}
           />
+          <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4 max-h-[70vh] overflow-y-auto">
+            <ContourControls params={contourParams} onChange={setContourParams} />
+            <div className="border-t border-border pt-3">
+              <LabelControls params={labelStyle} onChange={setLabelStyle} />
+            </div>
+          </div>
         </div>
 
         {/* Map */}
@@ -184,14 +190,6 @@ const Index = () => {
             labelMode={labelMode}
             labelStyle={labelStyle}
           />
-        </div>
-
-        {/* Controls panel */}
-        <div className="absolute bottom-4 left-4 z-10 bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4">
-          <ContourControls params={contourParams} onChange={setContourParams} />
-          <div className="border-t border-border pt-3">
-            <LabelControls params={labelStyle} onChange={setLabelStyle} />
-          </div>
         </div>
 
         {/* Marker panel */}
