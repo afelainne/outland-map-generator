@@ -51,13 +51,24 @@ interface LabelControlsProps {
 
 const COLOR_PRESETS = [
   { label: 'Theme BG', value: '' },
-  { label: 'White', value: '#ffffff' },
-  { label: 'Black', value: '#000000' },
-  { label: 'Green', value: '#22c55e' },
-  { label: 'Blue', value: '#3b82f6' },
-  { label: 'Red', value: '#ef4444' },
-  { label: 'Yellow', value: '#eab308' },
-  { label: 'Orange', value: '#f97316' },
+  { label: 'Monorail White', value: '#fcfcf5' },
+  { label: 'Foundation Black', value: '#1d1c1a' },
+  { label: 'Industrial Paper', value: '#e0e0e4' },
+  { label: 'Frontier Red', value: '#b0604f' },
+  { label: 'Imagineer Clay', value: '#d9d7cd' },
+  { label: 'Pavilion Bronze', value: '#a09368' },
+  { label: 'Neutral Brown', value: '#837a76' },
+  { label: 'Earth Brown', value: '#48382e' },
+  { label: 'Wanderer Lilac', value: '#d3d1e1' },
+  { label: 'Expo Purple', value: '#3f2c58' },
+  { label: 'New Earth Green', value: '#d8e0d9' },
+  { label: 'Botanical Green', value: '#3a5a42' },
+  { label: 'Skyway Blue', value: '#c6dbc6' },
+  { label: 'Coastal Blue', value: '#429773' },
+  { label: 'Outpost Grey', value: '#919191' },
+  { label: 'Clay Black', value: '#2d2d1f' },
+  { label: 'Observatory Blue', value: '#2d3362' },
+];
 ];
 
 const ColorPicker = ({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) => (
