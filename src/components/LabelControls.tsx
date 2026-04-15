@@ -84,6 +84,21 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
     <div className="space-y-3">
       <div className="text-[10px] text-muted-foreground tracking-widest uppercase mb-2">Label Style</div>
 
+      <div className="space-y-1">
+        <span className="text-[10px] font-mono text-foreground/70">Marker Icon</span>
+        <div className="flex gap-1">
+          {([['dot', '●'], ['shapes', '△◇'], ['logo', '◎']] as const).map(([type, icon]) => (
+            <button
+              key={type}
+              onClick={() => update('markerType', type)}
+              className={`flex-1 h-6 text-[9px] font-mono rounded border transition-all ${params.markerType === type ? 'bg-foreground/15 border-foreground/40 text-foreground' : 'border-border/50 text-foreground/50 hover:text-foreground/70'}`}
+            >
+              {icon}
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-foreground/70">Uppercase</span>
         <Switch checked={params.uppercase} onCheckedChange={(v) => update('uppercase', v)} className="scale-75" />
