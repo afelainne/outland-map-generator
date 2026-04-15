@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const },
+  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1, markerType: 'dot' as const, markerSize: 1 },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -88,7 +88,7 @@ const MapCanvas = ({
 
   const renderMarkerShape = (m: MapMarker) => {
     const isSelected = m.id === selectedMarkerId;
-    const size = 6;
+    const size = 6 * labelStyle.markerSize;
     const strokeW = isSelected ? 2 : 1.2;
 
     switch (m.shape) {
@@ -161,7 +161,7 @@ const MapCanvas = ({
           const bgFill = labelStyle.bgColor || theme.bg;
           const strokeColor = labelStyle.outlineColor || theme.bg;
           const isFullOpacity = labelStyle.opacity >= 1;
-          const dotR = dot.r * s;
+          const dotR = dot.r * s * labelStyle.markerSize;
           const mType = labelStyle.markerType;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
           const shapeType = shapes[i % shapes.length];
