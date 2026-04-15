@@ -108,7 +108,7 @@ const Index = () => {
   const selectedMarker = allMarkers.find((m) => m.id === selectedMarkerId) || null;
 
   return (
-    <div className="flex flex-col h-screen bg-background" style={{ fontFamily: "'Space Mono', monospace" }}>
+    <div className="flex flex-col h-screen bg-background" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/80 backdrop-blur">
         <div className="flex items-center gap-3">

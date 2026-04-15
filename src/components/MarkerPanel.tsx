@@ -15,7 +15,7 @@ const MarkerPanel = ({ marker, onClose, onDelete, onRename }: MarkerPanelProps) 
 
   return (
     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-card/95 backdrop-blur border border-border rounded-lg p-4 flex items-center gap-3 shadow-lg z-20"
-      style={{ fontFamily: "'Space Mono', monospace" }}
+      style={{ fontFamily: "'IBM Plex Mono', monospace" }}
     >
       <span className="text-xs text-muted-foreground">#{marker.number}</span>
       <Input

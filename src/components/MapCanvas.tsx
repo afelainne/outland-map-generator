@@ -2,6 +2,8 @@ import { useRef, useCallback, useMemo } from 'react';
 import type { MapTheme } from '@/lib/themes';
 import type { MapMarker, ScatterDot } from '@/lib/noise';
 import type { LabelStyleParams } from '@/components/LabelControls';
+import { IBM_PLEX_400 } from '@/lib/ibmPlexMono400';
+import { IBM_PLEX_700 } from '@/lib/ibmPlexMono700';
 
 /** Create abbreviation from name: "Department of Imagination" → "D.O.I." */
 function abbreviate(name: string): string {
@@ -126,12 +128,16 @@ const MapCanvas = ({
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
         className="max-w-full max-h-full"
-        style={{ fontFamily: "'Space Mono', monospace", cursor: activeTool && activeTool !== 'select' ? 'crosshair' : 'default' }}
+        style={{ fontFamily: "'IBM Plex Mono', monospace", cursor: activeTool && activeTool !== 'select' ? 'crosshair' : 'default' }}
         onClick={handleClick}
       >
         <defs>
-          {/* Embed font for SVG export / Figma */}
-          <style>{`@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');`}</style>
+          {/* Embed font as base64 for SVG export / Figma */}
+          <style>{`
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 400; src: url('data:font/truetype;base64,${IBM_PLEX_400}') format('truetype'); }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 700; src: url('data:font/truetype;base64,${IBM_PLEX_700}') format('truetype'); }
+text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
+          `}</style>
           {/* Paper texture filter */}
           <filter id={filterId}>
             <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" result="noise" />
@@ -338,7 +344,7 @@ const MapCanvas = ({
                 fill={theme.text}
                 fontSize={fontSize}
                 opacity="0.9"
-                style={{ fontFamily: "'Space Mono', monospace" }}
+                style={{ fontFamily: "'IBM Plex Mono', monospace" }}
               >
                 {labelText}
               </text>
@@ -366,7 +372,7 @@ const MapCanvas = ({
               fontSize="9"
               letterSpacing="3"
               opacity="0.8"
-              style={{ fontFamily: "'Space Mono', monospace" }}
+              style={{ fontFamily: "'IBM Plex Mono', monospace" }}
             >
               OUTLAND MAP
             </text>
@@ -382,7 +388,7 @@ const MapCanvas = ({
           fontSize="72"
           fontWeight="bold"
           opacity="0.12"
-          style={{ fontFamily: "'Space Mono', monospace" }}
+          style={{ fontFamily: "'IBM Plex Mono', monospace" }}
         >
           {String(mapNumber).padStart(2, '0')}
         </text>
@@ -439,7 +445,7 @@ const MapCanvas = ({
                 fontSize={4 * ls}
                 letterSpacing={1.5 * ls}
                 opacity="0.5"
-                style={{ fontFamily: "'Space Mono', monospace" }}
+                style={{ fontFamily: "'IBM Plex Mono', monospace" }}
               >
                 WORLDS
               </text>
@@ -491,7 +497,7 @@ const MapCanvas = ({
                       y={itemY + 2 * ls}
                       fill={theme.text}
                       fontSize={4.5 * ls}
-                      style={{ fontFamily: "'Space Mono', monospace" }}
+                      style={{ fontFamily: "'IBM Plex Mono', monospace" }}
                     >
                       {displayName}
                     </text>
