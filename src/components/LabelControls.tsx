@@ -20,6 +20,8 @@ export interface LabelStyleParams {
   showArrows: boolean;
   arrowSpacing: number;
   arrowSize: number;
+  showLegend: boolean;
+  showBranding: boolean;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -38,6 +40,8 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   showArrows: false,
   arrowSpacing: 80,
   arrowSize: 1,
+  showLegend: true,
+  showBranding: true,
 };
 
 interface LabelControlsProps {
