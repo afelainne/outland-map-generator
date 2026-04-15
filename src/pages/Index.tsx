@@ -24,7 +24,7 @@ const MAP_H = 800;
 
 const Index = () => {
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 100000));
-  const [themeId, setThemeId] = useState('green');
+  const [themeId, setThemeId] = useState('monorail');
   const [terrainId, setTerrainId] = useState('mountain');
   const [activeTool, setActiveTool] = useState<'select' | 'circle' | 'square' | 'triangle' | 'diamond'>('select');
   const [customMarkers, setCustomMarkers] = useState<MapMarker[]>([]);
