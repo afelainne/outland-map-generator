@@ -153,7 +153,7 @@ const Index = () => {
       {/* Main area */}
       <div className="flex-1 relative flex">
         {/* Toolbar + Controls side panel */}
-        <div className="absolute top-4 left-4 z-10 flex flex-col gap-3">
+        <div className="absolute top-4 left-4 z-10 flex gap-3">
           <MapToolbar
             activeTool={activeTool}
             onToolChange={setActiveTool}
@@ -162,7 +162,7 @@ const Index = () => {
             labelMode={labelMode}
             onCycleLabelMode={() => setLabelMode((v) => v === 'number' ? 'abbrev' : v === 'abbrev' ? 'full' : 'number')}
           />
-          <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4 max-h-[70vh] overflow-y-auto">
+          <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4 max-h-[80vh] overflow-y-auto">
             <ContourControls params={contourParams} onChange={setContourParams} />
             <div className="border-t border-border pt-3">
               <LabelControls params={labelStyle} onChange={setLabelStyle} />
@@ -203,7 +203,7 @@ const Index = () => {
         {/* Legend */}
         {selectedMarkerId === null && (
           <div
-            className="absolute bottom-4 right-4 border p-3 max-h-48 overflow-y-auto z-10"
+            className="absolute bottom-4 right-4 border p-3 z-10"
             style={{
               fontFamily: "'Space Mono', monospace",
               backgroundColor: `${theme.bg}ee`,
@@ -218,7 +218,7 @@ const Index = () => {
               Locations
             </div>
             <div className="space-y-1">
-              {dots.slice(0, 20).map((dot, i) => {
+              {dots.map((dot, i) => {
                 const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
                 const shapeType = shapes[i % shapes.length];
                 const displayName = labelStyle.uppercase ? (dot.name || '').toUpperCase() : dot.name || '';
@@ -263,9 +263,8 @@ const Index = () => {
                 return (
                   <div
                     key={`legend-${i}`}
-                    className="flex items-center gap-1.5 cursor-pointer"
+                    className="flex items-center gap-1.5"
                     style={{ color: theme.text, opacity: 0.8 }}
-                    onClick={() => {/* no marker selection for dots */}}
                   >
                     {renderLegendIcon()}
                     <span className="text-[10px]" style={{ fontFamily: "'Space Mono', monospace" }}>

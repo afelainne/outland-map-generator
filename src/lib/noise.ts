@@ -409,14 +409,54 @@ export function generateScatterDots(
     const j = Math.floor(rng() * (i + 1));
     [names[i], names[j]] = [names[j], names[i]];
   }
+
+  // Anti-overlap: each label occupies a bounding box (dot + text container)
+  // We estimate label width ~ name.length * 4.5 + 20, height ~ 18
+  const placed: { x: number; y: number; w: number; h: number }[] = [];
+
+  const overlaps = (x: number, y: number, w: number, h: number) => {
+    for (const p of placed) {
+      // Check AABB overlap with padding
+      const pad = 6;
+      if (
+        x < p.x + p.w + pad &&
+        x + w + pad > p.x &&
+        y - h / 2 < p.y + p.h / 2 + pad &&
+        y + h / 2 + pad > p.y - p.h / 2
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   const dots: ScatterDot[] = [];
+  const maxAttempts = 80;
+
   for (let i = 0; i < count; i++) {
-    dots.push({
-      x: rng() * width * 0.85 + width * 0.075,
-      y: rng() * height * 0.85 + height * 0.075,
-      r: rng() * 6 + 2,
-      name: names[i % names.length],
-    });
+    const name = names[i % names.length];
+    const r = rng() * 4 + 2;
+    const labelW = name.length * 4.5 + 20 + r;
+    const labelH = 18;
+    let bestX = 0, bestY = 0, found = false;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const x = rng() * width * 0.8 + width * 0.05;
+      const y = rng() * height * 0.8 + height * 0.1;
+
+      if (!overlaps(x, y, labelW, labelH)) {
+        bestX = x;
+        bestY = y;
+        found = true;
+        break;
+      }
+      // Keep last attempt as fallback
+      bestX = x;
+      bestY = y;
+    }
+
+    placed.push({ x: bestX, y: bestY, w: labelW, h: labelH });
+    dots.push({ x: bestX, y: bestY, r, name });
   }
   return dots;
 }
