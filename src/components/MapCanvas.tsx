@@ -330,7 +330,7 @@ const MapCanvas = ({
           const legendY = height - totalH - 12;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
           const mType = labelStyle.markerType;
-          const radius = labelStyle.rounded ? 3 * ls : 0;
+          const radius = 3 * ls;
 
           return (
             <g>
