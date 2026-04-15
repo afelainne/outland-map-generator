@@ -25,6 +25,13 @@ export interface LabelStyleParams {
   showBranding: boolean;
   gridOpacity: number;
   gridLineWidth: number;
+  // Opacity controls
+  nameIconOpacity: number;
+  nameTextOpacity: number;
+  boardNumberOpacity: number;
+  logoOpacity: number;
+  legendOpacity: number;
+  shapeOpacity: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -47,6 +54,12 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   showBranding: true,
   gridOpacity: 0.5,
   gridLineWidth: 1,
+  nameIconOpacity: 0.9,
+  nameTextOpacity: 0.9,
+  boardNumberOpacity: 0.12,
+  logoOpacity: 0.85,
+  legendOpacity: 0.8,
+  shapeOpacity: 1,
 };
 
 interface LabelControlsProps {
