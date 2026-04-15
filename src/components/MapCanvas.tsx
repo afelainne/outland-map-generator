@@ -51,7 +51,7 @@ const MapCanvas = ({
   lineWidth = 1,
   contourOpacity = 0.75,
   labelMode = 'number',
-  labelStyle = { uppercase: false, scale: 1, markerType: 'dot' as const, nameIconShape: null, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1 },
+  labelStyle = { ...{ uppercase: false, scale: 1, markerType: 'dot' as const, nameIconShape: null, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1, nameIconOpacity: 0.9, nameTextOpacity: 0.9, boardNumberOpacity: 0.12, logoOpacity: 0.85, legendOpacity: 0.8, shapeOpacity: 1 } },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
