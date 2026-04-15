@@ -9,6 +9,7 @@ export interface LabelStyleParams {
   rounded: boolean;
   bgColor: string;
   outlineColor: string;
+  scale: number;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
@@ -18,6 +19,7 @@ export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
   rounded: true,
   bgColor: '',
   outlineColor: '',
+  scale: 1,
 };
 
 interface LabelControlsProps {
@@ -113,6 +115,21 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
       {params.outline && (
         <ColorPicker label="Outline Color" value={params.outlineColor} onChange={(v) => update('outlineColor', v)} />
       )}
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-[10px] font-mono text-foreground/70">
+          <span>Size</span>
+          <span>{Math.round(params.scale * 100)}%</span>
+        </div>
+        <Slider
+          min={50}
+          max={200}
+          step={10}
+          value={[Math.round(params.scale * 100)]}
+          onValueChange={([v]) => update('scale', v / 100)}
+          className="w-full"
+        />
+      </div>
     </div>
   );
 };

@@ -47,7 +47,7 @@ const MapCanvas = ({
   seed,
   lineWidth = 1,
   labelMode = 'number',
-  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '' },
+  labelStyle = { uppercase: false, opacity: 0.15, outline: true, rounded: true, bgColor: '', outlineColor: '', scale: 1 },
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -152,18 +152,21 @@ const MapCanvas = ({
         {dots.map((dot, i) => {
           const rawText = dot.name || '';
           const labelText = labelStyle.uppercase ? rawText.toUpperCase() : rawText;
-          const charWidth = labelStyle.uppercase ? 4.2 : 3.8;
-          const textW = labelText.length * charWidth + 12;
-          const textH = 14;
-          const radius = labelStyle.rounded ? 3 : 0;
+          const s = labelStyle.scale;
+          const fontSize = 7 * s;
+          const charWidth = (labelStyle.uppercase ? 4.2 : 3.8) * s;
+          const textW = labelText.length * charWidth + 12 * s;
+          const textH = 14 * s;
+          const radius = labelStyle.rounded ? 3 * s : 0;
           const bgFill = labelStyle.bgColor || theme.bg;
           const strokeColor = labelStyle.outlineColor || theme.bg;
           const isFullOpacity = labelStyle.opacity >= 1;
+          const dotR = dot.r * s;
           return (
             <g key={`dot-${i}`}>
-              <circle cx={dot.x} cy={dot.y} r={dot.r} fill={theme.dot} opacity="0.9" />
+              <circle cx={dot.x} cy={dot.y} r={dotR} fill={theme.dot} opacity="0.9" />
               <rect
-                x={dot.x + dot.r + 4}
+                x={dot.x + dotR + 4}
                 y={dot.y - textH / 2}
                 width={textW}
                 height={textH}
@@ -176,10 +179,10 @@ const MapCanvas = ({
                 strokeOpacity={isFullOpacity ? 1 : 0.6}
               />
               <text
-                x={dot.x + dot.r + 10}
-                y={dot.y + 3.5}
+                x={dot.x + dotR + 6 * s + 4}
+                y={dot.y + fontSize * 0.35}
                 fill={theme.text}
-                fontSize="7"
+                fontSize={fontSize}
                 opacity="0.9"
                 style={{ fontFamily: "'Space Mono', monospace" }}
               >
