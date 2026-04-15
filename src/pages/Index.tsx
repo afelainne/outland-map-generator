@@ -24,6 +24,7 @@ const Index = () => {
   const [themeId, setThemeId] = useState('monorail');
   const [terrainId, setTerrainId] = useState('mountain');
   const [activeTool, setActiveTool] = useState<'select' | 'circle' | 'square' | 'triangle' | 'diamond'>('select');
+  const [globalShape, setGlobalShape] = useState<'circle' | 'square' | 'triangle' | 'diamond'>('circle');
   const [customMarkers, setCustomMarkers] = useState<MapMarker[]>([]);
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
