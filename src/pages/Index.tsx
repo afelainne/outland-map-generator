@@ -29,6 +29,7 @@ const Index = () => {
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
   const [contourParams, setContourParams] = useState<ContourParams>(DEFAULT_CONTOUR_PARAMS);
+  const [showNames, setShowNames] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
 
   const theme = MAP_THEMES.find((t) => t.id === themeId) || MAP_THEMES[0];
@@ -47,6 +48,18 @@ const Index = () => {
     setSeed(Math.floor(Math.random() * 100000));
     setCustomMarkers([]);
     setSelectedMarkerId(null);
+  }, []);
+
+  const handleRandomizeAll = useCallback(() => {
+    setSeed(Math.floor(Math.random() * 100000));
+    setCustomMarkers([]);
+    setSelectedMarkerId(null);
+    // Randomize theme
+    const rndTheme = MAP_THEMES[Math.floor(Math.random() * MAP_THEMES.length)];
+    setThemeId(rndTheme.id);
+    // Randomize terrain
+    const rndTerrain = TERRAIN_PRESETS[Math.floor(Math.random() * TERRAIN_PRESETS.length)];
+    setTerrainId(rndTerrain.id);
   }, []);
 
   const handleAddMarker = useCallback(
@@ -138,7 +151,14 @@ const Index = () => {
       <div className="flex-1 relative flex">
         {/* Toolbar */}
         <div className="absolute top-4 left-4 z-10">
-          <MapToolbar activeTool={activeTool} onToolChange={setActiveTool} onRegenerate={handleRegenerate} />
+          <MapToolbar
+            activeTool={activeTool}
+            onToolChange={setActiveTool}
+            onRegenerate={handleRegenerate}
+            onRandomizeAll={handleRandomizeAll}
+            showNames={showNames}
+            onToggleNames={() => setShowNames((v) => !v)}
+          />
         </div>
 
         {/* Map */}
@@ -158,6 +178,7 @@ const Index = () => {
             svgRef={svgRef}
             seed={seed}
             lineWidth={contourParams.lineWidth}
+            showNames={showNames}
           />
         </div>
 

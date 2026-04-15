@@ -17,6 +17,7 @@ interface MapCanvasProps {
   svgRef: React.RefObject<SVGSVGElement | null>;
   seed: number;
   lineWidth?: number;
+  showNames?: boolean;
 }
 
 const MapCanvas = ({
@@ -34,6 +35,7 @@ const MapCanvas = ({
   svgRef,
   seed,
   lineWidth = 1,
+  showNames = false,
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -171,11 +173,11 @@ const MapCanvas = ({
               x={m.x + 10}
               y={m.y - 2}
               fill={theme.text}
-              fontSize="7"
+              fontSize={showNames ? "5.5" : "7"}
               opacity="0.9"
               style={{ fontFamily: "'Space Mono', monospace" }}
             >
-              {m.number}
+              {showNames ? m.name : m.number}
             </text>
           </g>
         ))}
