@@ -16,6 +16,7 @@ export interface LabelStyleParams {
   markerSize: number;
   shapeScale: number;
   legendScale: number;
+  showShapes: boolean;
 }
 
 export const DEFAULT_LABEL_STYLE: LabelStyleParams = {
