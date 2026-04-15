@@ -156,8 +156,8 @@ const MapCanvas = ({
           const textW = labelText.length * charWidth + 12;
           const textH = 14;
           const radius = labelStyle.rounded ? 3 : 0;
-          const bgFill = labelStyle.bgColor || theme.dot;
-          const strokeColor = labelStyle.outlineColor || theme.dot;
+          const bgFill = labelStyle.bgColor || theme.bg;
+          const strokeColor = labelStyle.outlineColor || theme.bg;
           const isFullOpacity = labelStyle.opacity >= 1;
           return (
             <g key={`dot-${i}`}>
