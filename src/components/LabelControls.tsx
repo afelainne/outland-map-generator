@@ -88,7 +88,7 @@ const LabelControls = ({ params, onChange }: LabelControlsProps) => {
         <Slider
           min={0}
           max={100}
-          step={5}
+          step={1}
           value={[Math.round(params.gridOpacity * 100)]}
           onValueChange={([v]) => update('gridOpacity', v / 100)}
           className="w-full"
