@@ -404,9 +404,10 @@ const MapCanvas = ({
           const legendPadding = 5 * ls;
           const headerH = 9 * ls;
           const totalH = headerH + dots.length * legendItemH + legendPadding * 2;
-          const charW = labelStyle.uppercase ? 3.2 * ls : 2.8 * ls;
+          const fontSize = 4.5 * ls;
+          const charW = labelStyle.uppercase ? fontSize * 0.65 : fontSize * 0.55;
           const maxNameLen = Math.max(...dots.map(d => (d.name || '').length), 5);
-          const legendW = Math.max(90 * ls, legendPadding * 2 + 12 * ls + maxNameLen * charW * (4.5 * ls / 10));
+          const legendW = legendPadding * 2 + 12 * ls + maxNameLen * charW + 4 * ls;
           const legendX = width - 12;
           const legendY = height - totalH - 12;
           const shapes = ['circle', 'square', 'triangle', 'diamond'] as const;
