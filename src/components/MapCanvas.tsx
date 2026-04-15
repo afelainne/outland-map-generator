@@ -454,7 +454,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
                 const iconX = legendX - legendW + legendPadding + 3 * ls;
                 const textX = iconX + 8 * ls;
                 const displayName = labelStyle.uppercase ? (dot.name || '').toUpperCase() : dot.name || '';
-                const shapeType = shapes[i % shapes.length];
+                const shapeType = labelStyle.nameIconShape || shapes[i % shapes.length];
                 const sz = 2.5 * ls;
                 const c = theme.dot;
 
