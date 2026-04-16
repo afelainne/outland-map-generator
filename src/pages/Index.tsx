@@ -11,6 +11,7 @@ import ContourControls from '@/components/ContourControls';
 import LabelControls, { DEFAULT_LABEL_STYLE } from '@/components/LabelControls';
 import type { LabelStyleParams } from '@/components/LabelControls';
 import { useMapExport } from '@/hooks/useMapExport';
+import { MAP_PRESETS, getRandomPreset, buildRandomConfig } from '@/lib/presets';
 import {
   Select,
   SelectContent,
@@ -18,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import type { MapPreset } from '@/lib/presets';
 
 const Index = () => {
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 100000));
@@ -55,22 +57,32 @@ const Index = () => {
 
   const { exportSVG, exportRaster } = useMapExport(svgRef);
 
-  const handleRegenerate = useCallback(() => {
-    setSeed(Math.floor(Math.random() * 100000));
+  const applyPreset = useCallback((preset: MapPreset) => {
+    setSeed(preset.seed);
+    setThemeId(preset.themeId);
+    setTerrainId(preset.terrainId);
+    setContourParams(preset.contourParams);
+    setLabelMode(preset.labelMode);
+    setLabelStyle(prev => ({ ...prev, ...preset.labelStyle }));
     setCustomMarkers([]);
     setSelectedMarkerId(null);
   }, []);
 
+  const handleRegenerate = useCallback(() => {
+    const preset = getRandomPreset();
+    applyPreset(preset);
+  }, [applyPreset]);
+
   const handleRandomizeAll = useCallback(() => {
-    setSeed(Math.floor(Math.random() * 100000));
+    const config = buildRandomConfig();
+    setSeed(config.seed);
+    setThemeId(config.themeId);
+    setTerrainId(config.terrainId);
+    setContourParams(config.contourParams);
+    setLabelMode(config.labelMode);
+    setLabelStyle(prev => ({ ...prev, ...config.labelStyle }));
     setCustomMarkers([]);
     setSelectedMarkerId(null);
-    // Randomize theme from palette combinations
-    const rndTheme = MAP_THEMES[Math.floor(Math.random() * MAP_THEMES.length)];
-    setThemeId(rndTheme.id);
-    // Randomize terrain
-    const rndTerrain = TERRAIN_PRESETS[Math.floor(Math.random() * TERRAIN_PRESETS.length)];
-    setTerrainId(rndTerrain.id);
   }, []);
 
   const handleAddMarker = useCallback(
@@ -125,6 +137,26 @@ const Index = () => {
           <span className="text-sm font-bold tracking-[0.2em] uppercase">Outland Map</span>
         </div>
         <div className="flex items-center gap-3">
+          {/* Preset selector */}
+          <Select onValueChange={(id) => {
+            const preset = MAP_PRESETS.find(p => p.id === id);
+            if (preset) applyPreset(preset);
+          }}>
+            <SelectTrigger className="w-44 h-8 text-xs font-mono">
+              <SelectValue placeholder="Templates" />
+            </SelectTrigger>
+            <SelectContent>
+              {MAP_PRESETS.map((p) => (
+                <SelectItem key={p.id} value={p.id}>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium">{p.name}</span>
+                    <span className="text-[10px] text-muted-foreground">{p.description}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           {/* Terrain type selector */}
           <Select value={terrainId} onValueChange={setTerrainId}>
             <SelectTrigger className="w-44 h-8 text-xs font-mono">
