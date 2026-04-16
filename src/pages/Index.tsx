@@ -158,65 +158,80 @@ const Index = () => {
   return (
     <div className="flex flex-col h-screen bg-background" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/80 backdrop-blur">
-        <div className="flex items-center gap-3">
+      <header className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/80 backdrop-blur gap-4">
+        <div className="flex items-center gap-3 shrink-0">
           <OutlandLogo color="currentColor" height={24} />
         </div>
-        <div className="flex items-center gap-3">
-          {/* Preset selector */}
-          <Select onValueChange={(id) => {
-            const preset = MAP_PRESETS.find(p => p.id === id);
-            if (preset) applyPreset(preset);
-          }}>
-            <SelectTrigger className="w-44 h-8 text-xs font-mono">
-              <SelectValue placeholder="Templates" />
-            </SelectTrigger>
-            <SelectContent>
-              {MAP_PRESETS.map((p) => (
-                <SelectItem key={p.id} value={p.id}>
-                  <div className="flex flex-col">
-                    <span className="text-xs font-medium">{p.name}</span>
-                    <span className="text-[10px] text-muted-foreground">{p.description}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
 
-          {/* Terrain type selector */}
-          <Select value={terrainId} onValueChange={setTerrainId}>
-            <SelectTrigger className="w-44 h-8 text-xs font-mono">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {TERRAIN_PRESETS.map((t) => (
-                <SelectItem key={t.id} value={t.id}>
-                  <div className="flex flex-col">
+        <div className="flex items-center gap-2">
+          {/* GROUP 1 — Content / scene */}
+          <div className="flex items-center gap-1.5">
+            <Select onValueChange={(id) => {
+              const preset = MAP_PRESETS.find(p => p.id === id);
+              if (preset) applyPreset(preset);
+            }}>
+              <SelectTrigger className="w-36 h-8 text-xs font-mono">
+                <SelectValue placeholder="Templates" />
+              </SelectTrigger>
+              <SelectContent>
+                {MAP_PRESETS.map((p) => (
+                  <SelectItem key={p.id} value={p.id}>
+                    <div className="flex flex-col">
+                      <span className="text-xs font-medium">{p.name}</span>
+                      <span className="text-[10px] text-muted-foreground">{p.description}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={terrainId} onValueChange={setTerrainId}>
+              <SelectTrigger className="w-36 h-8 text-xs font-mono">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {TERRAIN_PRESETS.map((t) => (
+                  <SelectItem key={t.id} value={t.id}>
                     <span className="text-xs font-medium">{t.name}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-          {/* Theme selector */}
-          <Select value={themeId} onValueChange={setThemeId}>
-            <SelectTrigger className="w-36 h-8 text-xs font-mono">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {MAP_THEMES.map((t) => (
-                <SelectItem key={t.id} value={t.id}>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: t.bg }} />
-                    {t.name}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <Select value={themeId} onValueChange={setThemeId}>
+              <SelectTrigger className="w-36 h-8 text-xs font-mono">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {MAP_THEMES.map((t) => (
+                  <SelectItem key={t.id} value={t.id}>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full border border-border" style={{ backgroundColor: t.bg }} />
+                      <span className="text-xs">{t.name}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Divider */}
+          <div className="h-6 w-px bg-border mx-1" />
+
+          {/* GROUP 2 — File */}
           <TemplateManager getCurrentTemplate={getCurrentTemplate} onLoadTemplate={loadTemplate} />
-          <ExportBar resolution={resolution} onResolutionChange={setResolution} onExport={handleExport} canvasPresetId={canvasPresetId} onCanvasPresetChange={setCanvasPresetId} />
+
+          {/* Divider */}
+          <div className="h-6 w-px bg-border mx-1" />
+
+          {/* GROUP 3 — Export */}
+          <ExportBar
+            resolution={resolution}
+            onResolutionChange={setResolution}
+            onExport={handleExport}
+            canvasPresetId={canvasPresetId}
+            onCanvasPresetChange={setCanvasPresetId}
+          />
         </div>
       </header>
 

@@ -1,6 +1,5 @@
 import { Download, Monitor } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -8,6 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export interface CanvasPreset {
   id: string;
@@ -51,56 +55,73 @@ const ExportBar = ({ resolution, onResolutionChange, onExport, canvasPresetId, o
   const finalH = preset.height * mult;
 
   return (
-    <div className="flex items-center gap-2 p-2" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+    <div className="flex items-center gap-1.5" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
       {/* Canvas size preset */}
-      <div className="flex flex-col gap-0.5">
-        <Label className="text-[9px] uppercase tracking-wider text-muted-foreground px-1">Canvas Size</Label>
-        <Select value={canvasPresetId} onValueChange={onCanvasPresetChange}>
-          <SelectTrigger className="w-40 h-8 text-xs font-mono">
-            <Monitor size={12} className="mr-1 shrink-0" />
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {CANVAS_PRESETS.map((p) => (
-              <SelectItem key={p.id} value={p.id}>
-                <span className="text-xs">{p.label}</span>
-                <span className="text-[10px] ml-1 opacity-50">{p.width}×{p.height}</span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div>
+            <Select value={canvasPresetId} onValueChange={onCanvasPresetChange}>
+              <SelectTrigger className="w-36 h-8 text-xs font-mono">
+                <Monitor size={12} className="mr-1 shrink-0 opacity-60" />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {CANVAS_PRESETS.map((p) => (
+                  <SelectItem key={p.id} value={p.id}>
+                    <span className="text-xs">{p.label}</span>
+                    <span className="text-[10px] ml-1 opacity-50">{p.width}×{p.height}</span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>Canvas size · {preset.width}×{preset.height}px</TooltipContent>
+      </Tooltip>
 
-      <div className="flex flex-col gap-0.5">
-        <Label className="text-[9px] uppercase tracking-wider text-muted-foreground px-1">Export Quality (PNG/JPG)</Label>
-        <Select value={resolution} onValueChange={onResolutionChange}>
-          <SelectTrigger className="w-28 h-8 text-xs font-mono">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="1x">1x ({preset.width}px)</SelectItem>
-            <SelectItem value="2x">2x ({preset.width * 2}px)</SelectItem>
-            <SelectItem value="4x">4x ({preset.width * 4}px)</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Quality */}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div>
+            <Select value={resolution} onValueChange={onResolutionChange}>
+              <SelectTrigger className="w-16 h-8 text-xs font-mono">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1x">1x ({preset.width}px)</SelectItem>
+                <SelectItem value="2x">2x ({preset.width * 2}px)</SelectItem>
+                <SelectItem value="4x">4x ({preset.width * 4}px)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>Export quality (PNG/JPG) · final {finalW}×{finalH}px</TooltipContent>
+      </Tooltip>
 
-      <div className="flex flex-col gap-0.5">
-        <Label className="text-[9px] uppercase tracking-wider text-muted-foreground px-1">
-          Export → {finalW}×{finalH}px
-        </Label>
-        <div className="flex items-center gap-1.5">
+      <Tooltip>
+        <TooltipTrigger asChild>
           <Button variant="outline" size="sm" className="h-8 text-xs font-mono gap-1.5" onClick={() => onExport('svg')}>
             <Download size={12} /> SVG
           </Button>
+        </TooltipTrigger>
+        <TooltipContent>Export as vector SVG (resolution-independent)</TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
           <Button variant="outline" size="sm" className="h-8 text-xs font-mono gap-1.5" onClick={() => onExport('png')}>
             <Download size={12} /> PNG
           </Button>
+        </TooltipTrigger>
+        <TooltipContent>Export PNG · {finalW}×{finalH}px</TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
           <Button variant="outline" size="sm" className="h-8 text-xs font-mono gap-1.5" onClick={() => onExport('jpg')}>
             <Download size={12} /> JPG
           </Button>
-        </div>
-      </div>
+        </TooltipTrigger>
+        <TooltipContent>Export JPG · {finalW}×{finalH}px</TooltipContent>
+      </Tooltip>
     </div>
   );
 };
