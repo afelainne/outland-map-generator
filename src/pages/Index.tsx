@@ -57,22 +57,32 @@ const Index = () => {
 
   const { exportSVG, exportRaster } = useMapExport(svgRef);
 
-  const handleRegenerate = useCallback(() => {
-    setSeed(Math.floor(Math.random() * 100000));
+  const applyPreset = useCallback((preset: MapPreset) => {
+    setSeed(preset.seed);
+    setThemeId(preset.themeId);
+    setTerrainId(preset.terrainId);
+    setContourParams(preset.contourParams);
+    setLabelMode(preset.labelMode);
+    setLabelStyle(prev => ({ ...prev, ...preset.labelStyle }));
     setCustomMarkers([]);
     setSelectedMarkerId(null);
   }, []);
 
+  const handleRegenerate = useCallback(() => {
+    const preset = getRandomPreset();
+    applyPreset(preset);
+  }, [applyPreset]);
+
   const handleRandomizeAll = useCallback(() => {
-    setSeed(Math.floor(Math.random() * 100000));
+    const config = buildRandomConfig();
+    setSeed(config.seed);
+    setThemeId(config.themeId);
+    setTerrainId(config.terrainId);
+    setContourParams(config.contourParams);
+    setLabelMode(config.labelMode);
+    setLabelStyle(prev => ({ ...prev, ...config.labelStyle }));
     setCustomMarkers([]);
     setSelectedMarkerId(null);
-    // Randomize theme from palette combinations
-    const rndTheme = MAP_THEMES[Math.floor(Math.random() * MAP_THEMES.length)];
-    setThemeId(rndTheme.id);
-    // Randomize terrain
-    const rndTerrain = TERRAIN_PRESETS[Math.floor(Math.random() * TERRAIN_PRESETS.length)];
-    setTerrainId(rndTerrain.id);
   }, []);
 
   const handleAddMarker = useCallback(
