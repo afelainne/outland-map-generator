@@ -306,27 +306,29 @@ const Index = () => {
         </div>
 
         {/* Map */}
-        <div className={`flex-1 flex items-center justify-center ${fitToScreen ? 'p-2' : 'p-8'}`}>
-          <MapCanvas
-            width={MAP_W}
-            height={MAP_H}
-            contourPaths={contourPaths}
-            dots={dots}
-            markers={allMarkers}
-            theme={theme}
-            activeTool={activeTool}
-            onAddMarker={handleAddMarker}
-            onSelectMarker={setSelectedMarkerId}
-            selectedMarkerId={selectedMarkerId}
-            mapNumber={mapNumber}
-            svgRef={svgRef}
-            seed={seed}
-            lineWidth={contourParams.lineWidth}
-            contourOpacity={contourParams.contourOpacity}
-            labelMode={labelMode}
-            labelStyle={labelStyle}
-            customShape={customShape}
-          />
+        <div className={`flex-1 flex items-center justify-center min-h-0 min-w-0 ${fitToScreen ? 'p-2' : 'p-8'}`}>
+          <div className="w-full h-full flex items-center justify-center min-h-0 min-w-0">
+            <MapCanvas
+              width={MAP_W}
+              height={MAP_H}
+              contourPaths={contourPaths}
+              dots={dots}
+              markers={allMarkers}
+              theme={theme}
+              activeTool={activeTool}
+              onAddMarker={handleAddMarker}
+              onSelectMarker={setSelectedMarkerId}
+              selectedMarkerId={selectedMarkerId}
+              mapNumber={mapNumber}
+              svgRef={svgRef}
+              seed={seed}
+              lineWidth={contourParams.lineWidth}
+              contourOpacity={contourParams.contourOpacity}
+              labelMode={labelMode}
+              labelStyle={labelStyle}
+              customShape={customShape}
+            />
+          </div>
         </div>
 
         {/* Marker panel */}
