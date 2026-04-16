@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback } from 'react';
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react';
 import { generateContourLines, generateScatterDots, generateMarkers, LOCATION_NAMES, TERRAIN_PRESETS, DEFAULT_CONTOUR_PARAMS } from '@/lib/noise';
 import type { MapMarker, ContourParams } from '@/lib/noise';
 import type { CustomShape } from '@/lib/customShape';
@@ -42,6 +42,7 @@ const Index = () => {
   const [resolution, setResolution] = useState('2x');
   const [canvasPresetId, setCanvasPresetId] = useState('default');
   const [fitToScreen, setFitToScreen] = useState(false);
+  const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
   const [customShape, setCustomShape] = useState<CustomShape | null>(null);
 
   const canvasPreset = CANVAS_PRESETS.find(p => p.id === canvasPresetId) || CANVAS_PRESETS[0];
@@ -55,6 +56,28 @@ const Index = () => {
   const theme = MAP_THEMES.find((t) => t.id === themeId) || MAP_THEMES[0];
   const terrain = TERRAIN_PRESETS.find((t) => t.id === terrainId) || TERRAIN_PRESETS[0];
   const mapNumber = useMemo(() => (seed % 99) + 1, [seed]);
+
+  useEffect(() => {
+    const updateViewportSize = () => {
+      setViewportSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    updateViewportSize();
+    window.addEventListener('resize', updateViewportSize);
+    return () => window.removeEventListener('resize', updateViewportSize);
+  }, []);
+
+  const fitPreviewScale = useMemo(() => {
+    if (!fitToScreen || viewportSize.width === 0 || viewportSize.height === 0) return 1;
+
+    const headerHeight = 56;
+    const toolbarAllowance = 88;
+    const framePadding = 24;
+    const availableWidth = Math.max(0, viewportSize.width - toolbarAllowance - framePadding * 2);
+    const availableHeight = Math.max(0, viewportSize.height - headerHeight - framePadding * 2);
+
+    return Math.min(1, availableWidth / MAP_W, availableHeight / MAP_H) * 0.94;
+  }, [MAP_H, MAP_W, fitToScreen, viewportSize.height, viewportSize.width]);
 
   const contourPaths = useMemo(() => generateContourLines(MAP_W, MAP_H, seed, terrain, contourParams), [MAP_W, MAP_H, seed, terrain, contourParams]);
   const dots = useMemo(() => generateScatterDots(MAP_W, MAP_H, seed, 50), [MAP_W, MAP_H, seed]);
@@ -166,9 +189,9 @@ const Index = () => {
   const selectedMarker = allMarkers.find((m) => m.id === selectedMarkerId) || null;
 
   return (
-    <div className="flex flex-col h-screen bg-background" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+    <div className="flex h-screen flex-col overflow-hidden bg-background" style={{ fontFamily: "'IBM Plex Mono', monospace", height: '100dvh' }}>
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-2 border-b border-border bg-card/80 backdrop-blur gap-4">
+      <header className="flex shrink-0 items-center justify-between gap-4 border-b border-border bg-card/80 px-4 py-2 backdrop-blur">
         <div className="flex items-center gap-3 shrink-0">
           <OutlandLogo color="currentColor" height={24} />
         </div>
@@ -264,7 +287,7 @@ const Index = () => {
                 <Maximize2 size={14} />
               </Toggle>
             </TooltipTrigger>
-            <TooltipContent>Fit map to screen (hide controls panel)</TooltipContent>
+            <TooltipContent>Fit map to screen (overview mode)</TooltipContent>
           </Tooltip>
         </div>
       </header>
@@ -306,28 +329,38 @@ const Index = () => {
         </div>
 
         {/* Map */}
-        <div className={`flex-1 flex items-center justify-center min-h-0 min-w-0 ${fitToScreen ? 'p-2' : 'p-8'}`}>
-          <div className="w-full h-full flex items-center justify-center min-h-0 min-w-0">
-            <MapCanvas
-              width={MAP_W}
-              height={MAP_H}
-              contourPaths={contourPaths}
-              dots={dots}
-              markers={allMarkers}
-              theme={theme}
-              activeTool={activeTool}
-              onAddMarker={handleAddMarker}
-              onSelectMarker={setSelectedMarkerId}
-              selectedMarkerId={selectedMarkerId}
-              mapNumber={mapNumber}
-              svgRef={svgRef}
-              seed={seed}
-              lineWidth={contourParams.lineWidth}
-              contourOpacity={contourParams.contourOpacity}
-              labelMode={labelMode}
-              labelStyle={labelStyle}
-              customShape={customShape}
-            />
+        <div className={`flex-1 flex items-center justify-center min-h-0 min-w-0 overflow-hidden ${fitToScreen ? 'p-2' : 'p-8'}`}>
+          <div className="flex h-full w-full items-center justify-center min-h-0 min-w-0 overflow-hidden">
+            <div
+              className={fitToScreen ? 'shrink-0' : 'h-full w-full'}
+              style={fitToScreen ? {
+                width: `${MAP_W}px`,
+                height: `${MAP_H}px`,
+                transform: `scale(${fitPreviewScale})`,
+                transformOrigin: 'center center',
+              } : undefined}
+            >
+              <MapCanvas
+                width={MAP_W}
+                height={MAP_H}
+                contourPaths={contourPaths}
+                dots={dots}
+                markers={allMarkers}
+                theme={theme}
+                activeTool={activeTool}
+                onAddMarker={handleAddMarker}
+                onSelectMarker={setSelectedMarkerId}
+                selectedMarkerId={selectedMarkerId}
+                mapNumber={mapNumber}
+                svgRef={svgRef}
+                seed={seed}
+                lineWidth={contourParams.lineWidth}
+                contourOpacity={contourParams.contourOpacity}
+                labelMode={labelMode}
+                labelStyle={labelStyle}
+                customShape={customShape}
+              />
+            </div>
           </div>
         </div>
 
