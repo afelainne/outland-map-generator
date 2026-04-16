@@ -148,8 +148,10 @@ const MapCanvas = ({
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio="xMidYMid meet"
-        className="max-w-full max-h-full w-auto h-auto"
-        style={{ fontFamily: "'IBM Plex Mono', monospace", cursor: activeTool && activeTool !== 'select' ? 'crosshair' : 'default', maxHeight: '100%', maxWidth: '100%' }}
+        width="100%"
+        height="100%"
+        className="block"
+        style={{ fontFamily: "'IBM Plex Mono', monospace", cursor: activeTool && activeTool !== 'select' ? 'crosshair' : 'default', maxWidth: '100%', maxHeight: '100%' }}
         onClick={handleClick}
       >
         <defs>
