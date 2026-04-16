@@ -6,6 +6,8 @@ import MapCanvas from '@/components/MapCanvas';
 import MapToolbar from '@/components/MapToolbar';
 import MarkerPanel from '@/components/MarkerPanel';
 import ExportBar, { CANVAS_PRESETS } from '@/components/ExportBar';
+import TemplateManager from '@/components/TemplateManager';
+import type { SavedTemplate } from '@/lib/templateIO';
 import OutlandLogo from '@/components/OutlandLogo';
 import ContourControls from '@/components/ContourControls';
 import LabelControls, { DEFAULT_LABEL_STYLE } from '@/components/LabelControls';
@@ -72,6 +74,31 @@ const Index = () => {
     const preset = getRandomPreset();
     applyPreset(preset);
   }, [applyPreset]);
+
+  const getCurrentTemplate = useCallback((name: string): SavedTemplate => ({
+    version: 1,
+    name,
+    createdAt: new Date().toISOString(),
+    seed,
+    themeId,
+    terrainId,
+    contourParams,
+    labelMode,
+    labelStyle,
+    canvasPresetId,
+  }), [seed, themeId, terrainId, contourParams, labelMode, labelStyle, canvasPresetId]);
+
+  const loadTemplate = useCallback((t: SavedTemplate) => {
+    setSeed(t.seed);
+    setThemeId(t.themeId);
+    setTerrainId(t.terrainId);
+    setContourParams(t.contourParams);
+    setLabelMode(t.labelMode);
+    setLabelStyle(t.labelStyle);
+    if (t.canvasPresetId) setCanvasPresetId(t.canvasPresetId);
+    setCustomMarkers([]);
+    setSelectedMarkerId(null);
+  }, []);
 
   const handleRandomizeAll = useCallback(() => {
     const config = buildRandomConfig();
@@ -188,6 +215,7 @@ const Index = () => {
               ))}
             </SelectContent>
           </Select>
+          <TemplateManager getCurrentTemplate={getCurrentTemplate} onLoadTemplate={loadTemplate} />
           <ExportBar resolution={resolution} onResolutionChange={setResolution} onExport={handleExport} canvasPresetId={canvasPresetId} onCanvasPresetChange={setCanvasPresetId} />
         </div>
       </header>
