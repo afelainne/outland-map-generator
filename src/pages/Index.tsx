@@ -170,7 +170,7 @@ const Index = () => {
               const preset = MAP_PRESETS.find(p => p.id === id);
               if (preset) applyPreset(preset);
             }}>
-              <SelectTrigger className="w-36 h-8 text-xs font-mono">
+              <SelectTrigger className="w-36 h-8 text-xs font-mono [&>span]:truncate [&>span]:block [&>span]:overflow-hidden [&>span]:whitespace-nowrap [&>span]:text-left">
                 <SelectValue placeholder="Templates" />
               </SelectTrigger>
               <SelectContent>
@@ -186,7 +186,7 @@ const Index = () => {
             </Select>
 
             <Select value={terrainId} onValueChange={setTerrainId}>
-              <SelectTrigger className="w-36 h-8 text-xs font-mono">
+              <SelectTrigger className="w-36 h-8 text-xs font-mono [&>span]:truncate [&>span]:block [&>span]:overflow-hidden [&>span]:whitespace-nowrap [&>span]:text-left">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -199,14 +199,19 @@ const Index = () => {
             </Select>
 
             <Select value={themeId} onValueChange={setThemeId}>
-              <SelectTrigger className="w-36 h-8 text-xs font-mono">
-                <SelectValue />
+              <SelectTrigger className="w-36 h-8 text-xs font-mono [&>span]:truncate [&>span]:block [&>span]:overflow-hidden [&>span]:whitespace-nowrap [&>span]:text-left [&>span]:min-w-0">
+                <SelectValue>
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-3 h-3 rounded-full border border-border shrink-0" style={{ backgroundColor: theme.bg }} />
+                    <span className="text-xs truncate">{theme.name}</span>
+                  </div>
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {MAP_THEMES.map((t) => (
                   <SelectItem key={t.id} value={t.id}>
                     <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full border border-border" style={{ backgroundColor: t.bg }} />
+                      <div className="w-3 h-3 rounded-full border border-border shrink-0" style={{ backgroundColor: t.bg }} />
                       <span className="text-xs">{t.name}</span>
                     </div>
                   </SelectItem>
