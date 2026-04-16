@@ -325,6 +325,7 @@ const Index = () => {
             contourOpacity={contourParams.contourOpacity}
             labelMode={labelMode}
             labelStyle={labelStyle}
+            customShape={customShape}
           />
         </div>
 
