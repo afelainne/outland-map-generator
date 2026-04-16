@@ -1,0 +1,13 @@
+# Local and VCS metadata
+.git
+
+# Tests and development-only files
+src/test/
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Editor and temporary files
+.vscode/
+*.log
