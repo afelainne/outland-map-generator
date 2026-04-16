@@ -55,7 +55,7 @@ const ExportBar = ({ resolution, onResolutionChange, onExport, canvasPresetId, o
   const finalH = preset.height * mult;
 
   return (
-    <div className="flex items-center gap-1.5" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+    <div className="flex items-center gap-1.5 font-sans">
       {/* Canvas size preset */}
       <Tooltip>
         <TooltipTrigger asChild>
