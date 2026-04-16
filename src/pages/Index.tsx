@@ -137,6 +137,26 @@ const Index = () => {
           <span className="text-sm font-bold tracking-[0.2em] uppercase">Outland Map</span>
         </div>
         <div className="flex items-center gap-3">
+          {/* Preset selector */}
+          <Select onValueChange={(id) => {
+            const preset = MAP_PRESETS.find(p => p.id === id);
+            if (preset) applyPreset(preset);
+          }}>
+            <SelectTrigger className="w-44 h-8 text-xs font-mono">
+              <SelectValue placeholder="Templates" />
+            </SelectTrigger>
+            <SelectContent>
+              {MAP_PRESETS.map((p) => (
+                <SelectItem key={p.id} value={p.id}>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-medium">{p.name}</span>
+                    <span className="text-[10px] text-muted-foreground">{p.description}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
           {/* Terrain type selector */}
           <Select value={terrainId} onValueChange={setTerrainId}>
             <SelectTrigger className="w-44 h-8 text-xs font-mono">
