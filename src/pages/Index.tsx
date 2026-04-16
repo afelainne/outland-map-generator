@@ -291,16 +291,18 @@ const Index = () => {
             markerType={labelStyle.markerType}
             onMarkerTypeChange={(type) => setLabelStyle((prev) => ({ ...prev, markerType: type }))}
           />
-          <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4">
-            <ContourControls params={contourParams} onChange={setContourParams} />
-            <div className="border-t border-border pt-3">
-              <LabelControls params={labelStyle} onChange={setLabelStyle} />
+          {!fitToScreen && (
+            <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4">
+              <ContourControls params={contourParams} onChange={setContourParams} />
+              <div className="border-t border-border pt-3">
+                <LabelControls params={labelStyle} onChange={setLabelStyle} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Map */}
-        <div className="flex-1 flex items-center justify-center p-8">
+        <div className={`flex-1 flex items-center justify-center ${fitToScreen ? 'p-2' : 'p-8'}`}>
           <MapCanvas
             width={MAP_W}
             height={MAP_H}
