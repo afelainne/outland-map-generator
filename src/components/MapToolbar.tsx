@@ -123,6 +123,38 @@ const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, la
         {labelModeLabels[labelMode]}
       </Button>
       <div className="h-px bg-border my-1" />
+      {/* Custom SVG shape upload */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".svg,image/svg+xml"
+        className="hidden"
+        onChange={handleUpload}
+      />
+      <Button
+        variant={customShape ? 'default' : 'ghost'}
+        size="icon"
+        onClick={() => fileInputRef.current?.click()}
+        title={customShape ? `Custom shape: ${customShape.name}` : 'Upload custom SVG shape'}
+        className="w-9 h-9"
+      >
+        <Upload size={16} />
+      </Button>
+      {customShape && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => {
+            onCustomShapeChange(null);
+            toast.success('Custom shape cleared');
+          }}
+          title="Clear custom shape"
+          className="w-9 h-9 text-destructive"
+        >
+          <X size={14} />
+        </Button>
+      )}
+      <div className="h-px bg-border my-1" />
       <Button variant="ghost" size="icon" onClick={onRegenerate} title="Regenerate Map" className="w-9 h-9">
         <RefreshCw size={18} />
       </Button>
