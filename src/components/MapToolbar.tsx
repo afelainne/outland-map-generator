@@ -1,6 +1,9 @@
-import { Circle, Square, Triangle, Diamond, MousePointer, RefreshCw, Shuffle } from 'lucide-react';
+import { Circle, Square, Triangle, Diamond, MousePointer, RefreshCw, Shuffle, Upload, X } from 'lucide-react';
+import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import type { MarkerType } from '@/components/LabelControls';
+import { parseSvgFile, type CustomShape } from '@/lib/customShape';
+import { toast } from 'sonner';
 
 type Tool = 'select' | 'circle' | 'square' | 'triangle' | 'diamond';
 type LabelMode = 'number' | 'abbrev' | 'full';
@@ -14,6 +17,8 @@ interface MapToolbarProps {
   onCycleLabelMode: () => void;
   markerType: MarkerType;
   onMarkerTypeChange: (type: MarkerType) => void;
+  customShape: CustomShape | null;
+  onCustomShapeChange: (shape: CustomShape | null) => void;
 }
 
 const tools: { id: Tool; icon: React.ReactNode; label: string }[] = [
@@ -42,7 +47,29 @@ const markerTypeIcons: { id: MarkerType; icon: string; label: string }[] = [
   { id: 'logo', icon: '◎', label: 'Logo Icon' },
 ];
 
-const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, labelMode, onCycleLabelMode, markerType, onMarkerTypeChange }: MapToolbarProps) => {
+const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, labelMode, onCycleLabelMode, markerType, onMarkerTypeChange, customShape, onCustomShapeChange }: MapToolbarProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.svg') && file.type !== 'image/svg+xml') {
+      toast.error('Please upload a valid .svg file');
+      return;
+    }
+    const text = await file.text();
+    const shape = parseSvgFile(text, file.name);
+    if (!shape) {
+      toast.error('Could not parse SVG file');
+    } else {
+      onCustomShapeChange(shape);
+      onMarkerTypeChange('shapes');
+      toast.success(`Custom shape loaded: ${file.name}`);
+    }
+    // Reset so same file can be re-uploaded
+    e.target.value = '';
+  };
+
   const shapesActive = activeTool !== 'select';
 
   return (
@@ -95,6 +122,38 @@ const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, la
       >
         {labelModeLabels[labelMode]}
       </Button>
+      <div className="h-px bg-border my-1" />
+      {/* Custom SVG shape upload */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".svg,image/svg+xml"
+        className="hidden"
+        onChange={handleUpload}
+      />
+      <Button
+        variant={customShape ? 'default' : 'ghost'}
+        size="icon"
+        onClick={() => fileInputRef.current?.click()}
+        title={customShape ? `Custom shape: ${customShape.name}` : 'Upload custom SVG shape'}
+        className="w-9 h-9"
+      >
+        <Upload size={16} />
+      </Button>
+      {customShape && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => {
+            onCustomShapeChange(null);
+            toast.success('Custom shape cleared');
+          }}
+          title="Clear custom shape"
+          className="w-9 h-9 text-destructive"
+        >
+          <X size={14} />
+        </Button>
+      )}
       <div className="h-px bg-border my-1" />
       <Button variant="ghost" size="icon" onClick={onRegenerate} title="Regenerate Map" className="w-9 h-9">
         <RefreshCw size={18} />

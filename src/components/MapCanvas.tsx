@@ -2,6 +2,7 @@ import { useRef, useCallback, useMemo } from 'react';
 import type { MapTheme } from '@/lib/themes';
 import type { MapMarker, ScatterDot } from '@/lib/noise';
 import type { LabelStyleParams } from '@/components/LabelControls';
+import type { CustomShape } from '@/lib/customShape';
 import { IBM_PLEX_400 } from '@/lib/ibmPlexMono400';
 import { IBM_PLEX_700 } from '@/lib/ibmPlexMono700';
 
@@ -32,6 +33,7 @@ interface MapCanvasProps {
   contourOpacity?: number;
   labelMode?: 'number' | 'abbrev' | 'full';
   labelStyle?: LabelStyleParams;
+  customShape?: CustomShape | null;
 }
 
 const MapCanvas = ({
@@ -52,6 +54,7 @@ const MapCanvas = ({
   contourOpacity = 0.75,
   labelMode = 'number',
   labelStyle = { ...{ uppercase: false, scale: 1, markerType: 'dot' as const, nameIconShape: null, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1, nameIconOpacity: 0.9, nameTextOpacity: 0.9, boardNumberOpacity: 0.12, logoOpacity: 0.85, legendOpacity: 0.8, shapeOpacity: 1 } },
+  customShape = null,
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -96,6 +99,23 @@ const MapCanvas = ({
     const isSelected = m.id === selectedMarkerId;
     const size = 6 * labelStyle.shapeScale;
     const strokeW = isSelected ? 2 : 1.2;
+
+    // Custom uploaded SVG overrides all built-in shapes
+    if (customShape) {
+      const targetSize = size * 2; // diameter equivalent
+      const scale = targetSize / Math.max(customShape.viewBox.w, customShape.viewBox.h);
+      const tx = m.x - (customShape.viewBox.x + customShape.viewBox.w / 2) * scale;
+      const ty = m.y - (customShape.viewBox.y + customShape.viewBox.h / 2) * scale;
+      return (
+        <g
+          transform={`translate(${tx} ${ty}) scale(${scale})`}
+          stroke={theme.line}
+          strokeWidth={(isSelected ? 2 : 1.2) / scale}
+          fill="none"
+          dangerouslySetInnerHTML={{ __html: customShape.innerSvg }}
+        />
+      );
+    }
 
     switch (m.shape) {
       case 'circle':

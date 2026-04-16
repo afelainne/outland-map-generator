@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo, useCallback } from 'react';
 import { generateContourLines, generateScatterDots, generateMarkers, LOCATION_NAMES, TERRAIN_PRESETS, DEFAULT_CONTOUR_PARAMS } from '@/lib/noise';
 import type { MapMarker, ContourParams } from '@/lib/noise';
+import type { CustomShape } from '@/lib/customShape';
 import { MAP_THEMES } from '@/lib/themes';
 import MapCanvas from '@/components/MapCanvas';
 import MapToolbar from '@/components/MapToolbar';
@@ -41,6 +42,7 @@ const Index = () => {
   const [resolution, setResolution] = useState('2x');
   const [canvasPresetId, setCanvasPresetId] = useState('default');
   const [fitToScreen, setFitToScreen] = useState(false);
+  const [customShape, setCustomShape] = useState<CustomShape | null>(null);
 
   const canvasPreset = CANVAS_PRESETS.find(p => p.id === canvasPresetId) || CANVAS_PRESETS[0];
   const MAP_W = canvasPreset.width;
@@ -290,6 +292,8 @@ const Index = () => {
             onCycleLabelMode={() => setLabelMode((v) => v === 'number' ? 'abbrev' : v === 'abbrev' ? 'full' : 'number')}
             markerType={labelStyle.markerType}
             onMarkerTypeChange={(type) => setLabelStyle((prev) => ({ ...prev, markerType: type }))}
+            customShape={customShape}
+            onCustomShapeChange={setCustomShape}
           />
           {!fitToScreen && (
             <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4">
@@ -321,6 +325,7 @@ const Index = () => {
             contourOpacity={contourParams.contourOpacity}
             labelMode={labelMode}
             labelStyle={labelStyle}
+            customShape={customShape}
           />
         </div>
 
