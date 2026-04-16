@@ -61,7 +61,7 @@ const ExportBar = ({ resolution, onResolutionChange, onExport, canvasPresetId, o
         <TooltipTrigger asChild>
           <div>
             <Select value={canvasPresetId} onValueChange={onCanvasPresetChange}>
-              <SelectTrigger className="w-36 h-8 text-xs font-mono">
+              <SelectTrigger className="w-36 h-8 text-xs font-mono [&>span]:truncate [&>span]:block [&>span]:overflow-hidden [&>span]:whitespace-nowrap [&>span]:text-left [&>span]:min-w-0">
                 <Monitor size={12} className="mr-1 shrink-0 opacity-60" />
                 <SelectValue />
               </SelectTrigger>
