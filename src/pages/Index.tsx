@@ -270,7 +270,7 @@ const Index = () => {
       </header>
 
       {/* Main area */}
-      <div className="flex-1 relative flex">
+      <div className="flex-1 relative flex min-h-0 min-w-0 overflow-hidden">
         {/* Toolbar + Controls side panel */}
         <div className="absolute top-4 left-4 z-10 flex gap-3">
           <MapToolbar
