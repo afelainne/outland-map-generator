@@ -11,6 +11,7 @@ import ContourControls from '@/components/ContourControls';
 import LabelControls, { DEFAULT_LABEL_STYLE } from '@/components/LabelControls';
 import type { LabelStyleParams } from '@/components/LabelControls';
 import { useMapExport } from '@/hooks/useMapExport';
+import { MAP_PRESETS, getRandomPreset, buildRandomConfig } from '@/lib/presets';
 import {
   Select,
   SelectContent,
