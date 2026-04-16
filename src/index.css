@@ -118,7 +118,15 @@ All colors MUST be HSL.
     overflow: hidden;
   }
 
+  html {
+    font-family: 'TestPitch', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+  }
+
   body {
     @apply bg-background text-foreground;
+    font-family: 'TestPitch', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    font-feature-settings: "ss01", "kern";
   }
 }
