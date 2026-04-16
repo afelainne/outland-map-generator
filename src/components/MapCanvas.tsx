@@ -143,12 +143,13 @@ const MapCanvas = ({
   const blockH = height * 0.12;
 
   return (
-    <div ref={containerRef} className="relative w-full h-full flex items-center justify-center overflow-hidden">
+    <div ref={containerRef} className="relative w-full h-full flex items-center justify-center overflow-hidden min-h-0 min-w-0">
       <svg
         ref={svgRef}
         viewBox={`0 0 ${width} ${height}`}
-        className="max-w-full max-h-full"
-        style={{ fontFamily: "'IBM Plex Mono', monospace", cursor: activeTool && activeTool !== 'select' ? 'crosshair' : 'default' }}
+        preserveAspectRatio="xMidYMid meet"
+        className="max-w-full max-h-full w-auto h-auto"
+        style={{ fontFamily: "'IBM Plex Mono', monospace", cursor: activeTool && activeTool !== 'select' ? 'crosshair' : 'default', maxHeight: '100%', maxWidth: '100%' }}
         onClick={handleClick}
       >
         <defs>
