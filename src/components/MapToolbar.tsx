@@ -47,7 +47,29 @@ const markerTypeIcons: { id: MarkerType; icon: string; label: string }[] = [
   { id: 'logo', icon: '◎', label: 'Logo Icon' },
 ];
 
-const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, labelMode, onCycleLabelMode, markerType, onMarkerTypeChange }: MapToolbarProps) => {
+const MapToolbar = ({ activeTool, onToolChange, onRegenerate, onRandomizeAll, labelMode, onCycleLabelMode, markerType, onMarkerTypeChange, customShape, onCustomShapeChange }: MapToolbarProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.svg') && file.type !== 'image/svg+xml') {
+      toast.error('Please upload a valid .svg file');
+      return;
+    }
+    const text = await file.text();
+    const shape = parseSvgFile(text, file.name);
+    if (!shape) {
+      toast.error('Could not parse SVG file');
+    } else {
+      onCustomShapeChange(shape);
+      onMarkerTypeChange('shapes');
+      toast.success(`Custom shape loaded: ${file.name}`);
+    }
+    // Reset so same file can be re-uploaded
+    e.target.value = '';
+  };
+
   const shapesActive = activeTool !== 'select';
 
   return (
