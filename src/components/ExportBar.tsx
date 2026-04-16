@@ -16,7 +16,7 @@ export interface CanvasPreset {
 }
 
 export const CANVAS_PRESETS: CanvasPreset[] = [
-  { id: 'default', label: 'Default', width: 2104, height: 3075 },
+  { id: 'default', label: 'Default', width: 1080, height: 1580 },
   { id: 'square', label: 'Square 1:1', width: 800, height: 800 },
   { id: 'instagram', label: 'Instagram Post', width: 1080, height: 1080 },
   { id: 'instagram-story', label: 'IG Story 9:16', width: 1080, height: 1920 },
