@@ -1,5 +1,6 @@
 import { Download, Monitor } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -45,44 +46,61 @@ interface ExportBarProps {
 
 const ExportBar = ({ resolution, onResolutionChange, onExport, canvasPresetId, onCanvasPresetChange }: ExportBarProps) => {
   const preset = CANVAS_PRESETS.find(p => p.id === canvasPresetId) || CANVAS_PRESETS[0];
+  const mult = resolution === '1x' ? 1 : resolution === '2x' ? 2 : 4;
+  const finalW = preset.width * mult;
+  const finalH = preset.height * mult;
 
   return (
     <div className="flex items-center gap-2 p-2" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
       {/* Canvas size preset */}
-      <Select value={canvasPresetId} onValueChange={onCanvasPresetChange}>
-        <SelectTrigger className="w-40 h-8 text-xs font-mono">
-          <Monitor size={12} className="mr-1 shrink-0" />
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {CANVAS_PRESETS.map((p) => (
-            <SelectItem key={p.id} value={p.id}>
-              <span className="text-xs">{p.label}</span>
-              <span className="text-[10px] ml-1 opacity-50">{p.width}×{p.height}</span>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="flex flex-col gap-0.5">
+        <Label className="text-[9px] uppercase tracking-wider text-muted-foreground px-1">Canvas Size</Label>
+        <Select value={canvasPresetId} onValueChange={onCanvasPresetChange}>
+          <SelectTrigger className="w-40 h-8 text-xs font-mono">
+            <Monitor size={12} className="mr-1 shrink-0" />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {CANVAS_PRESETS.map((p) => (
+              <SelectItem key={p.id} value={p.id}>
+                <span className="text-xs">{p.label}</span>
+                <span className="text-[10px] ml-1 opacity-50">{p.width}×{p.height}</span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-      <Select value={resolution} onValueChange={onResolutionChange}>
-        <SelectTrigger className="w-28 h-8 text-xs font-mono">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="1x">1x ({preset.width}px)</SelectItem>
-          <SelectItem value="2x">2x ({preset.width * 2}px)</SelectItem>
-          <SelectItem value="4x">4x ({preset.width * 4}px)</SelectItem>
-        </SelectContent>
-      </Select>
-      <Button variant="outline" size="sm" className="h-8 text-xs font-mono gap-1.5" onClick={() => onExport('svg')}>
-        <Download size={12} /> SVG
-      </Button>
-      <Button variant="outline" size="sm" className="h-8 text-xs font-mono gap-1.5" onClick={() => onExport('png')}>
-        <Download size={12} /> PNG
-      </Button>
-      <Button variant="outline" size="sm" className="h-8 text-xs font-mono gap-1.5" onClick={() => onExport('jpg')}>
-        <Download size={12} /> JPG
-      </Button>
+      <div className="flex flex-col gap-0.5">
+        <Label className="text-[9px] uppercase tracking-wider text-muted-foreground px-1">Export Quality (PNG/JPG)</Label>
+        <Select value={resolution} onValueChange={onResolutionChange}>
+          <SelectTrigger className="w-28 h-8 text-xs font-mono">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="1x">1x ({preset.width}px)</SelectItem>
+            <SelectItem value="2x">2x ({preset.width * 2}px)</SelectItem>
+            <SelectItem value="4x">4x ({preset.width * 4}px)</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="flex flex-col gap-0.5">
+        <Label className="text-[9px] uppercase tracking-wider text-muted-foreground px-1">
+          Export → {finalW}×{finalH}px
+        </Label>
+        <div className="flex items-center gap-1.5">
+          <Button variant="outline" size="sm" className="h-8 text-xs font-mono gap-1.5" onClick={() => onExport('svg')}>
+            <Download size={12} /> SVG
+          </Button>
+          <Button variant="outline" size="sm" className="h-8 text-xs font-mono gap-1.5" onClick={() => onExport('png')}>
+            <Download size={12} /> PNG
+          </Button>
+          <Button variant="outline" size="sm" className="h-8 text-xs font-mono gap-1.5" onClick={() => onExport('jpg')}>
+            <Download size={12} /> JPG
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
