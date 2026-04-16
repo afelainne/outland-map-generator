@@ -245,6 +245,25 @@ const Index = () => {
             canvasPresetId={canvasPresetId}
             onCanvasPresetChange={setCanvasPresetId}
           />
+
+          {/* Divider */}
+          <div className="h-6 w-px bg-border mx-1" />
+
+          {/* GROUP 4 — View */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={fitToScreen}
+                onPressedChange={setFitToScreen}
+                size="sm"
+                className="h-8 w-8 p-0 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+                aria-label="Fit map to screen"
+              >
+                <Maximize2 size={14} />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Fit map to screen (hide controls panel)</TooltipContent>
+          </Tooltip>
         </div>
       </header>
 
