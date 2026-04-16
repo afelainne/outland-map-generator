@@ -329,16 +329,19 @@ const Index = () => {
         </div>
 
         {/* Map */}
-        <div className={`flex-1 flex items-center justify-center min-h-0 min-w-0 overflow-hidden ${fitToScreen ? 'p-2' : 'p-8'}`}>
-          <div className="flex h-full w-full items-center justify-center min-h-0 min-w-0 overflow-hidden">
+        <div className={`flex-1 min-h-0 min-w-0 ${fitToScreen ? 'flex items-center justify-center overflow-hidden p-2' : 'overflow-auto p-8'}`}>
+          <div className={fitToScreen ? 'flex h-full w-full items-center justify-center min-h-0 min-w-0 overflow-hidden' : 'flex w-full justify-center'}>
             <div
-              className={fitToScreen ? 'shrink-0' : 'h-full w-full'}
+              className={fitToScreen ? 'shrink-0' : 'shrink-0'}
               style={fitToScreen ? {
                 width: `${MAP_W}px`,
                 height: `${MAP_H}px`,
                 transform: `scale(${fitPreviewScale})`,
                 transformOrigin: 'center center',
-              } : undefined}
+              } : {
+                width: `${MAP_W}px`,
+                height: `${MAP_H}px`,
+              }}
             >
               <MapCanvas
                 width={MAP_W}
