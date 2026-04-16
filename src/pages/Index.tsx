@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import type { MapPreset } from '@/lib/presets';
 
 const Index = () => {
   const [seed, setSeed] = useState(() => Math.floor(Math.random() * 100000));
