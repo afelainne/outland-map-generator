@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo, useCallback } from 'react';
 import { generateContourLines, generateScatterDots, generateMarkers, LOCATION_NAMES, TERRAIN_PRESETS, DEFAULT_CONTOUR_PARAMS } from '@/lib/noise';
 import type { MapMarker, ContourParams } from '@/lib/noise';
+import type { CustomShape } from '@/lib/customShape';
 import { MAP_THEMES } from '@/lib/themes';
 import MapCanvas from '@/components/MapCanvas';
 import MapToolbar from '@/components/MapToolbar';
