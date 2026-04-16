@@ -30,7 +30,7 @@ const Index = () => {
   const [renamedMarkers, setRenamedMarkers] = useState<Record<string, string>>({});
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
-  const [canvasPresetId, setCanvasPresetId] = useState('square');
+  const [canvasPresetId, setCanvasPresetId] = useState('default');
 
   const canvasPreset = CANVAS_PRESETS.find(p => p.id === canvasPresetId) || CANVAS_PRESETS[0];
   const MAP_W = canvasPreset.width;
