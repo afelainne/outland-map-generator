@@ -1,6 +1,9 @@
-import { Circle, Square, Triangle, Diamond, MousePointer, RefreshCw, Shuffle } from 'lucide-react';
+import { Circle, Square, Triangle, Diamond, MousePointer, RefreshCw, Shuffle, Upload, X } from 'lucide-react';
+import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import type { MarkerType } from '@/components/LabelControls';
+import { parseSvgFile, type CustomShape } from '@/lib/customShape';
+import { toast } from 'sonner';
 
 type Tool = 'select' | 'circle' | 'square' | 'triangle' | 'diamond';
 type LabelMode = 'number' | 'abbrev' | 'full';
@@ -14,6 +17,8 @@ interface MapToolbarProps {
   onCycleLabelMode: () => void;
   markerType: MarkerType;
   onMarkerTypeChange: (type: MarkerType) => void;
+  customShape: CustomShape | null;
+  onCustomShapeChange: (shape: CustomShape | null) => void;
 }
 
 const tools: { id: Tool; icon: React.ReactNode; label: string }[] = [
