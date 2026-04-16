@@ -40,6 +40,7 @@ const Index = () => {
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
   const [canvasPresetId, setCanvasPresetId] = useState('default');
+  const [fitToScreen, setFitToScreen] = useState(false);
 
   const canvasPreset = CANVAS_PRESETS.find(p => p.id === canvasPresetId) || CANVAS_PRESETS[0];
   const MAP_W = canvasPreset.width;
