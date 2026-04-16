@@ -259,7 +259,7 @@ const Index = () => {
             markerType={labelStyle.markerType}
             onMarkerTypeChange={(type) => setLabelStyle((prev) => ({ ...prev, markerType: type }))}
           />
-          <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4 max-h-[80vh] overflow-y-auto">
+          <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4">
             <ContourControls params={contourParams} onChange={setContourParams} />
             <div className="border-t border-border pt-3">
               <LabelControls params={labelStyle} onChange={setLabelStyle} />
