@@ -21,6 +21,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Toggle } from '@/components/ui/toggle';
+import { Maximize2 } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import type { MapPreset } from '@/lib/presets';
 
 const Index = () => {
@@ -33,6 +40,7 @@ const Index = () => {
   const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [resolution, setResolution] = useState('2x');
   const [canvasPresetId, setCanvasPresetId] = useState('default');
+  const [fitToScreen, setFitToScreen] = useState(false);
 
   const canvasPreset = CANVAS_PRESETS.find(p => p.id === canvasPresetId) || CANVAS_PRESETS[0];
   const MAP_W = canvasPreset.width;
@@ -237,6 +245,25 @@ const Index = () => {
             canvasPresetId={canvasPresetId}
             onCanvasPresetChange={setCanvasPresetId}
           />
+
+          {/* Divider */}
+          <div className="h-6 w-px bg-border mx-1" />
+
+          {/* GROUP 4 — View */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={fitToScreen}
+                onPressedChange={setFitToScreen}
+                size="sm"
+                className="h-8 w-8 p-0 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+                aria-label="Fit map to screen"
+              >
+                <Maximize2 size={14} />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Fit map to screen (hide controls panel)</TooltipContent>
+          </Tooltip>
         </div>
       </header>
 
@@ -264,16 +291,18 @@ const Index = () => {
             markerType={labelStyle.markerType}
             onMarkerTypeChange={(type) => setLabelStyle((prev) => ({ ...prev, markerType: type }))}
           />
-          <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4">
-            <ContourControls params={contourParams} onChange={setContourParams} />
-            <div className="border-t border-border pt-3">
-              <LabelControls params={labelStyle} onChange={setLabelStyle} />
+          {!fitToScreen && (
+            <div className="bg-card/90 backdrop-blur border border-border rounded-lg p-4 w-56 space-y-4">
+              <ContourControls params={contourParams} onChange={setContourParams} />
+              <div className="border-t border-border pt-3">
+                <LabelControls params={labelStyle} onChange={setLabelStyle} />
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Map */}
-        <div className="flex-1 flex items-center justify-center p-8">
+        <div className={`flex-1 flex items-center justify-center ${fitToScreen ? 'p-2' : 'p-8'}`}>
           <MapCanvas
             width={MAP_W}
             height={MAP_H}
