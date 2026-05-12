@@ -42,6 +42,7 @@ const Index = () => {
   const [resolution, setResolution] = useState('2x');
   const [canvasPresetId, setCanvasPresetId] = useState('default');
   const [fitToScreen, setFitToScreen] = useState(false);
+  const [minimalMode, setMinimalMode] = useState(false);
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
   const [customShape, setCustomShape] = useState<CustomShape | null>(null);
 
