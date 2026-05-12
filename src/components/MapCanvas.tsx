@@ -400,21 +400,23 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         )}
 
         {/* Large map number - faint background */}
-        <text
-          x={width - 30}
-          y={100}
-          textAnchor="end"
-          fill={theme.text}
-          fontSize="72"
-          fontWeight="bold"
-          opacity={labelStyle.boardNumberOpacity ?? 0.12}
-          style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-        >
-          {String(mapNumber).padStart(2, '0')}
-        </text>
+        {!minimalMode && (
+          <text
+            x={width - 30}
+            y={100}
+            textAnchor="end"
+            fill={theme.text}
+            fontSize="72"
+            fontWeight="bold"
+            opacity={labelStyle.boardNumberOpacity ?? 0.12}
+            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+          >
+            {String(mapNumber).padStart(2, '0')}
+          </text>
+        )}
 
         {/* Markers (shapes only, no labels) */}
-        {labelStyle.showShapes && markers.map((m) => (
+        {!minimalMode && labelStyle.showShapes && markers.map((m) => (
           <g
             key={m.id}
             opacity={labelStyle.shapeOpacity ?? 1}
