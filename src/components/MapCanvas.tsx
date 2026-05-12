@@ -315,7 +315,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         })}
 
         {/* Location name labels with dot containers */}
-        {dots.map((dot, i) => {
+        {!minimalMode && dots.map((dot, i) => {
           const rawText = dot.name || '';
           const labelText = labelStyle.uppercase ? rawText.toUpperCase() : rawText;
           const s = labelStyle.scale;
