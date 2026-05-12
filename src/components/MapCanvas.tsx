@@ -34,6 +34,7 @@ interface MapCanvasProps {
   labelMode?: 'number' | 'abbrev' | 'full';
   labelStyle?: LabelStyleParams;
   customShape?: CustomShape | null;
+  minimalMode?: boolean;
 }
 
 const MapCanvas = ({
