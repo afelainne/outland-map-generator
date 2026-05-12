@@ -290,6 +290,21 @@ const Index = () => {
             </TooltipTrigger>
             <TooltipContent>Fit map to screen (overview mode)</TooltipContent>
           </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={minimalMode}
+                onPressedChange={setMinimalMode}
+                size="sm"
+                className="h-8 w-8 p-0 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+                aria-label="Hide names and shapes"
+              >
+                <EyeOff size={14} />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Hide names & shapes (texture, grid & contours only)</TooltipContent>
+          </Tooltip>
         </div>
       </header>
 
