@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Toggle } from '@/components/ui/toggle';
-import { Maximize2 } from 'lucide-react';
+import { Maximize2, EyeOff } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
