@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Toggle } from '@/components/ui/toggle';
-import { Maximize2 } from 'lucide-react';
+import { Maximize2, EyeOff } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -42,6 +42,7 @@ const Index = () => {
   const [resolution, setResolution] = useState('2x');
   const [canvasPresetId, setCanvasPresetId] = useState('default');
   const [fitToScreen, setFitToScreen] = useState(false);
+  const [minimalMode, setMinimalMode] = useState(false);
   const [viewportSize, setViewportSize] = useState({ width: 0, height: 0 });
   const [customShape, setCustomShape] = useState<CustomShape | null>(null);
 
@@ -289,6 +290,21 @@ const Index = () => {
             </TooltipTrigger>
             <TooltipContent>Fit map to screen (overview mode)</TooltipContent>
           </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Toggle
+                pressed={minimalMode}
+                onPressedChange={setMinimalMode}
+                size="sm"
+                className="h-8 w-8 p-0 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+                aria-label="Hide names and shapes"
+              >
+                <EyeOff size={14} />
+              </Toggle>
+            </TooltipTrigger>
+            <TooltipContent>Hide names & shapes (texture, grid & contours only)</TooltipContent>
+          </Tooltip>
         </div>
       </header>
 
@@ -362,6 +378,7 @@ const Index = () => {
                 labelMode={labelMode}
                 labelStyle={labelStyle}
                 customShape={customShape}
+                minimalMode={minimalMode}
               />
             </div>
           </div>

@@ -34,6 +34,7 @@ interface MapCanvasProps {
   labelMode?: 'number' | 'abbrev' | 'full';
   labelStyle?: LabelStyleParams;
   customShape?: CustomShape | null;
+  minimalMode?: boolean;
 }
 
 const MapCanvas = ({
@@ -55,6 +56,7 @@ const MapCanvas = ({
   labelMode = 'number',
   labelStyle = { ...{ uppercase: false, scale: 1, markerType: 'dot' as const, nameIconShape: null, markerSize: 1, shapeScale: 1, legendScale: 0.7, showShapes: true, showArrows: false, arrowSpacing: 80, arrowSize: 1, arrowShape: 'chevron' as const, showLineElements: false, lineElementSpacing: 40, lineElementSize: 1, showLegend: true, showBranding: true, gridOpacity: 0.5, gridLineWidth: 1, nameIconOpacity: 0.9, nameTextOpacity: 0.9, boardNumberOpacity: 0.12, logoOpacity: 0.85, legendOpacity: 0.8, shapeOpacity: 1 } },
   customShape = null,
+  minimalMode = false,
 }: MapCanvasProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -313,7 +315,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         })}
 
         {/* Location name labels with dot containers */}
-        {dots.map((dot, i) => {
+        {!minimalMode && dots.map((dot, i) => {
           const rawText = dot.name || '';
           const labelText = labelStyle.uppercase ? rawText.toUpperCase() : rawText;
           const s = labelStyle.scale;
@@ -377,7 +379,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         })}
 
         {/* Outland Logo */}
-        {labelStyle.showBranding && (
+        {!minimalMode && labelStyle.showBranding && (
           <g transform={`translate(20, ${height - 12 - 252 * ((blockW * 1.8) / 1184)}) scale(${(blockW * 1.8) / 1184})`} opacity={labelStyle.logoOpacity ?? 0.85}>
             <path d="M14.7676 157.397H30.5068V141.657H46.2471V157.397H61.9863V141.657H77.7266V157.397H93.4658V141.657H109.697C110.398 147.221 111.841 152.678 113.996 157.881C117.16 165.519 121.797 172.459 127.644 178.306C133.49 184.152 140.431 188.79 148.069 191.954C155.708 195.118 163.894 196.746 172.162 196.746C180.43 196.746 188.617 195.118 196.256 191.954C203.894 188.79 210.835 184.152 216.682 178.306C222.528 172.459 227.165 165.519 230.329 157.881C232.484 152.678 233.927 147.221 234.628 141.657H249.887C242.141 203.771 189.155 251.835 124.943 251.835C60.7314 251.835 7.74547 203.771 0 141.657H14.7676V157.397Z" fill={theme.text}/>
             <path d="M30.5068 141.657H14.7676V125.918H30.5068V141.657Z" fill={theme.text}/>
@@ -398,21 +400,23 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         )}
 
         {/* Large map number - faint background */}
-        <text
-          x={width - 30}
-          y={100}
-          textAnchor="end"
-          fill={theme.text}
-          fontSize="72"
-          fontWeight="bold"
-          opacity={labelStyle.boardNumberOpacity ?? 0.12}
-          style={{ fontFamily: "'IBM Plex Mono', monospace" }}
-        >
-          {String(mapNumber).padStart(2, '0')}
-        </text>
+        {!minimalMode && (
+          <text
+            x={width - 30}
+            y={100}
+            textAnchor="end"
+            fill={theme.text}
+            fontSize="72"
+            fontWeight="bold"
+            opacity={labelStyle.boardNumberOpacity ?? 0.12}
+            style={{ fontFamily: "'IBM Plex Mono', monospace" }}
+          >
+            {String(mapNumber).padStart(2, '0')}
+          </text>
+        )}
 
         {/* Markers (shapes only, no labels) */}
-        {labelStyle.showShapes && markers.map((m) => (
+        {!minimalMode && labelStyle.showShapes && markers.map((m) => (
           <g
             key={m.id}
             opacity={labelStyle.shapeOpacity ?? 1}
@@ -427,7 +431,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         ))}
 
         {/* Legend inside SVG */}
-        {labelStyle.showLegend && (() => {
+        {!minimalMode && labelStyle.showLegend && (() => {
           const ls = labelStyle.legendScale;
           const legendItemH = 10 * ls;
           const legendPadding = 5 * ls;
