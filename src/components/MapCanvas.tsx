@@ -431,7 +431,7 @@ text, tspan { font-family: 'IBM Plex Mono', monospace !important; }
         ))}
 
         {/* Legend inside SVG */}
-        {labelStyle.showLegend && (() => {
+        {!minimalMode && labelStyle.showLegend && (() => {
           const ls = labelStyle.legendScale;
           const legendItemH = 10 * ls;
           const legendPadding = 5 * ls;
