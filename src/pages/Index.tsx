@@ -378,6 +378,7 @@ const Index = () => {
                 labelMode={labelMode}
                 labelStyle={labelStyle}
                 customShape={customShape}
+                minimalMode={minimalMode}
               />
             </div>
           </div>
